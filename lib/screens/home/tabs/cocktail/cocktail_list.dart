@@ -24,63 +24,76 @@ class _CocktailListState extends State<CocktailList> {
           return CircularProgressWidget();
         }
         if (state is CocktailLoaded) {
-          print(state.cocktails);
           if (state.cocktails?.isEmpty ?? false) {
             return Center(child: Text('empty cocktails'));
           }
-          return true
-              ? CustomScrollView(
-                  slivers: <Widget>[
-                    SliverOverlapInjector(
-                      // This is the flip side of the SliverOverlapAbsorber
-                      // above.
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          widget.context),
-                    ),
-                    SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 10.0,
-                        childAspectRatio: 1.0,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          CocktailModel cocktailModel = state.cocktails[index];
-
-                          return Image.network(cocktailModel.strDrinkThumb);
-                        },
-                        childCount: state.cocktails.length,
-                      ),
-                    )
-                  ],
-                )
-              : AnimationLimiter(
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      childAspectRatio: 1,
-                    ),
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: state.cocktails?.length ?? 0,
-                    itemBuilder: (context, index) {
+          return AnimationLimiter(
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverOverlapInjector(
+                  // This is the flip side of the SliverOverlapAbsorber
+                  // above.
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      widget.context),
+                ),
+                SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0,
+                    childAspectRatio: 9 / 11,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
                       CocktailModel cocktailModel = state.cocktails[index];
+
                       return AnimationConfiguration.staggeredList(
                         position: index,
                         duration: Duration(milliseconds: 500),
                         child: SlideAnimation(
-                          horizontalOffset: 50,
+                          verticalOffset: 100,
                           child: FadeInAnimation(
-                            child: Image.network(cocktailModel.strDrinkThumb),
+                            child: Column(
+                              children: [
+                                Flexible(
+                                  flex:9,
+                                  child: Card(
+                                    color: Styles.backgroundColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    elevation: 5,
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    child: Image.network(
+                                      cocktailModel.strDrinkThumb,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Text(
+                                    cocktailModel.strDrink,
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Text(
+                                    cocktailModel.strCategory,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
                     },
+                    childCount: state.cocktails.length,
                   ),
-                );
+                )
+              ],
+            ),
+          );
         }
         if (state is CocktailError) {
           return Text('error');

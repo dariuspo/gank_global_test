@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: ^0.5.0+1
+  firebase_auth: ^0.18.1+2
   bloc: ^6.1.0
   flutter_bloc: ^6.0.6
   agora_rtm: ^0.9.14

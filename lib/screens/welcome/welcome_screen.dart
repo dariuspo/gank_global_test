@@ -1,6 +1,8 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gank_global_test/blocs/auth/bloc.dart';
 import 'package:gank_global_test/helpers/after_init.dart';
 import 'package:gank_global_test/helpers/styles.dart';
 import 'package:gank_global_test/screens/home/home_screen.dart';
@@ -20,6 +22,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   TargetPlatform _platform;
   VideoPlayerController _videoPlayerController;
   ChewieController _chewieController;
+  AuthBloc _authBloc;
 
   @override
   void initState() {
@@ -46,6 +49,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void afterInitState() {
     ScreenUtil.init(context,
         designSize: Size(1080, 2400), allowFontScaling: true);
+    _authBloc = BlocProvider.of<AuthBloc>(context);
   }
 
   @override
@@ -77,21 +81,26 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             ),
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 200.h),
-            child: ElevatedRoundButton(
-              'Sign in anonymously',
-              () {
-                Get.off(HomeScreen());
-              },
-            ),
-          ),
+        BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state){
+            if(state.isLoading){
+              return CircularProgressIndicator();
+            }
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 200.h),
+                child: ElevatedRoundButton(
+                  'Sign in anonymously',
+                      () {
+                    _authBloc.add(Login());
+                  },
+                ),
+              ),
+            );
+          },
         )
       ],
     );
   }
 }
-
-

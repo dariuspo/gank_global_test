@@ -18,9 +18,7 @@ class CocktailBloc extends Bloc<CocktailEvent, CocktailState> {
   ) async* {
     if (event is FetchCocktails) {
       try {
-        print('fetch cocktails');
         final cocktails = await _cocktailRepository.fetchCocktails();
-
         yield CocktailLoaded(cocktails: cocktails);
       } catch (_) {
         yield CocktailError();

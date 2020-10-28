@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class Styles {
   //color style
   static final Color accentColor = Color(0xFFBBD243);
-  static final Color backgroundColor = Color(0xFF313345);
+  static final Color backgroundColor = Color(0xFF0F1620);
   static final Color buttonColor = Color(0xFF6441A5);
   static final Color radarColor = Color(0xFFD35F60);
 

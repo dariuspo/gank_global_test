@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'
     hide TabBar, TabBarIndicatorSize, TabBarView;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gank_global_test/blocs/auth/bloc.dart';
 import 'package:gank_global_test/custom_libs/tabs.dart';
 import 'package:gank_global_test/datas/tabs_data.dart';
 import 'package:gank_global_test/helpers/after_init.dart';
 import 'package:gank_global_test/helpers/styles.dart';
-import 'package:gank_global_test/screens/home/tabs/account_screen.dart';
+import 'file:///C:/Users/Lenovo/Work/Source/gank_global_test/lib/screens/home/tabs/account/account_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/cocktail/cocktail_screen.dart';
 import 'package:gank_global_test/widgets/containers/color_cover_gradient_widget.dart';
 
@@ -23,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen>
   ScrollController _scrollViewController;
   double _top = 0.0;
   StreamController<int> _streamController = StreamController<int>()..add(0);
+  AuthBloc _authBloc;
 
   @override
   void initState() {
@@ -38,6 +41,8 @@ class _HomeScreenState extends State<HomeScreen>
   void afterInitState() {
     ScreenUtil.init(context,
         designSize: Size(1080, 2400), allowFontScaling: true);
+    _authBloc = BlocProvider.of<AuthBloc>(context);
+
   }
 
   @override
@@ -121,7 +126,8 @@ class _HomeScreenState extends State<HomeScreen>
                                             ),
                                             Styles.smallSpace,
                                             Padding(
-                                              padding: const EdgeInsets.all(2.0),
+                                              padding:
+                                                  const EdgeInsets.all(2.0),
                                               child: Container(
                                                 padding: EdgeInsets.all(5),
                                                 width: 260.w,
@@ -130,7 +136,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                   image: DecorationImage(
-                                                    image: AssetImage(e.bgImage),
+                                                    image:
+                                                        AssetImage(e.bgImage),
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
