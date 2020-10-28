@@ -1,22 +1,30 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gank_global_test/helpers/after_init.dart';
+import 'package:gank_global_test/helpers/styles.dart';
+import 'package:gank_global_test/screens/home_screen.dart';
+import 'package:gank_global_test/widgets/buttons/elevated_round_button.dart';
+import 'package:gank_global_test/widgets/containers/color_cover_gradient_widget.dart';
+import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with AfterInitMixin<WelcomeScreen> {
   TargetPlatform _platform;
   VideoPlayerController _videoPlayerController;
   ChewieController _chewieController;
 
   @override
   void initState() {
-    _videoPlayerController = VideoPlayerController.asset('assets/videos/intro_video.mp4');
-
+    _videoPlayerController =
+        VideoPlayerController.asset('assets/videos/intro_video.mp4');
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
       autoPlay: true,
@@ -35,6 +43,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   @override
+  void afterInitState() {
+    ScreenUtil.init(context,
+        designSize: Size(1080, 2400), allowFontScaling: true);
+  }
+
+  @override
   void dispose() {
     _videoPlayerController.dispose();
     _chewieController.dispose();
@@ -48,33 +62,36 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         Chewie(
           controller: _chewieController,
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(begin: Alignment.bottomRight, stops: [
-                  0.6,
-                  0.8,
-                  1
-                ], colors: [
-                  Colors.black.withOpacity(1),
-                  Colors.black.withOpacity(0.5),
-                  Colors.black.withOpacity(0.1)
-                ])),
-          ),
-        ),
+        ColorCoverGradientWidget(),
         Align(
           alignment: Alignment.topCenter,
           child: Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/5),
+            padding: EdgeInsets.only(top: 300.h),
             child: Column(
               children: [
-                Image.asset('assets/icons/open_logo.png')
+                SizedBox(
+                  width: 450.w,
+                  child: Image.asset('assets/icons/open_logo.png'),
+                )
               ],
             ),
           ),
         ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 200.h),
+            child: ElevatedRoundButton(
+              'Sign in anonymously',
+              () {
+                Get.off(HomeScreen());
+              },
+            ),
+          ),
+        )
       ],
     );
   }
 }
+
+
