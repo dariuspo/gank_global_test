@@ -1,38 +1,37 @@
-
 import 'package:equatable/equatable.dart';
+import 'package:gank_global_test/models/cocktail_model.dart';
 
-abstract class GameState extends Equatable {
-  const GameState();
+abstract class CocktailState extends Equatable {
+  const CocktailState();
 
   @override
   List<Object> get props => [];
 }
 
-class GameInitial extends GameState {}
+class CocktailInitial extends CocktailState {}
 
-class GameError extends GameState {}
+class CocktailLoading extends CocktailState {}
 
-class GameLoaded extends GameState {
-  final List<GameModel> games;
-  final List<DeviceModel> devices;
+class CocktailError extends CocktailState {}
 
-  const GameLoaded({
-    this.games,
-    this.devices
+class CocktailLoaded extends CocktailState {
+  final List<CocktailModel> cocktails;
+
+  const CocktailLoaded({
+    this.cocktails,
   });
 
-  GameLoaded copyWith({
-    List<GameModel> games
+  CocktailLoaded copyWith({
+    List<CocktailModel> cocktails
   }) {
-    return GameLoaded(
-      games: games ?? this.games,
-      devices: devices ?? this.devices,
+    return CocktailLoaded(
+      cocktails: cocktails ?? this.cocktails,
     );
   }
 
   @override
-  List<Object> get props => [games];
+  List<Object> get props => [cocktails];
 
   @override
-  String toString() => 'GameLoaded { games: $games }';
+  String toString() => 'GameLoaded { games: $cocktails }';
 }

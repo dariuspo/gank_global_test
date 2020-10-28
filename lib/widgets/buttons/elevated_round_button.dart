@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../styles/styles_text.dart';
-import '../../styles/styles_color.dart';
+import 'package:gank_global_test/helpers/styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class ElevatedRoundButton extends StatelessWidget {
@@ -11,21 +11,14 @@ class ElevatedRoundButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: FlatButton(
-        onPressed: onPressed,
-        padding: EdgeInsets.all(0),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 40),
-          decoration: BoxDecoration(
-              color: StylesColor.accentColor,
-              borderRadius: BorderRadius.circular(24),
-          ),
-          child: Text(
-            title,
-            style: StylesText.button.copyWith(color: Colors.white),
-          ),
-        ),
+    return FlatButton(
+      padding: EdgeInsets.symmetric(vertical: 60.h, horizontal: 200.h),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40.w)),
+      color: Styles.buttonColor,
+      onPressed: onPressed,
+      child: Text(
+        title,
+        style: Styles.textButton,
       ),
     );
   }

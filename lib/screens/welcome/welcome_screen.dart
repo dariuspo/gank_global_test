@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gank_global_test/helpers/after_init.dart';
 import 'package:gank_global_test/helpers/styles.dart';
-import 'package:gank_global_test/screens/home_screen.dart';
+import 'package:gank_global_test/screens/home/home_screen.dart';
 import 'package:gank_global_test/widgets/buttons/elevated_round_button.dart';
 import 'package:gank_global_test/widgets/containers/color_cover_gradient_widget.dart';
 import 'package:get/get.dart';
