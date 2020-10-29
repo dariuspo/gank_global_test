@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:agora_rtm/agora_rtm.dart';
+import 'package:gank_global_test/configs/agora_configs.dart';
 import 'package:gank_global_test/helpers/utils.dart';
 import 'package:gank_global_test/models/message_model.dart';
 import 'package:rxdart/rxdart.dart';
@@ -18,7 +19,7 @@ class ChatRepository {
 
   init() async {
     _client =
-        await AgoraRtmClient.createInstance('1f528117448648b6b897fd2d0966ddc8');
+        await AgoraRtmClient.createInstance(APP_ID);
     print(_client);
     _client.onMessageReceived = (AgoraRtmMessage message, String fromUid) {
 

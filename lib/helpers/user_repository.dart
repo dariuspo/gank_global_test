@@ -3,13 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gank_global_test/models/gank_user_model.dart';
 
 class UserRepository {
-  final _firestoreInstance = FirebaseFirestore.instance;
-  CollectionReference _userCollection;
+  final CollectionReference _userCollection =
+      FirebaseFirestore.instance.collection('users');
   GankUserModel currentUser;
-
-  UserRepository() {
-    _userCollection = _firestoreInstance.collection('users');
-  }
 
   Future<GankUserModel> getAndOrCreateUser(User user) async {
     final doc = await _userCollection.doc(user.uid).get();

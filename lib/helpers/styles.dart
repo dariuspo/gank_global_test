@@ -8,6 +8,7 @@ class Styles {
   static final Color cardColor = Color(0xFF222C35);
   static final Color buttonColor = Color(0xFF6441A5);
   static final Color radarColor = Color(0xFFD35F60);
+  static final Color whatsAppColor = Color(0xFF064C44);
 
   static final mainGradient = LinearGradient(
     begin: Alignment.bottomCenter,

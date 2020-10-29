@@ -15,7 +15,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc(
       {@required ChatRepository chatRepository,
       @required UserRepository userRepository})
-      : assert(chatRepository != null, userRepository != null),
+      : assert(chatRepository != null && userRepository != null),
         _chatRepository = chatRepository,
         _userRepository = userRepository,
         super(InitialState());

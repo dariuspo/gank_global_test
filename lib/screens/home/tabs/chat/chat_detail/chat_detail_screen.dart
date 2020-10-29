@@ -2,6 +2,8 @@ import 'package:bubble/bubble.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gank_global_test/blocs/call/call_bloc.dart';
+import 'package:gank_global_test/blocs/call/call_bloc_components.dart';
 import 'package:gank_global_test/helpers/styles.dart';
 import 'package:gank_global_test/helpers/extensions.dart';
 
@@ -12,8 +14,10 @@ import 'package:gank_global_test/models/message_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_bloc.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_repository.dart';
+import 'package:gank_global_test/screens/home/tabs/chat/call/call_screen.dart';
 import 'package:gank_global_test/widgets/animations/circular_progress_widget.dart';
 import 'package:gank_global_test/widgets/online_indicator_widget.dart';
+import 'package:get/get.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   final GankUserModel chatWithUser;
@@ -28,12 +32,12 @@ class ChatDetailScreen extends StatefulWidget {
 
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   final TextEditingController textEditingController = TextEditingController();
-  String currentUserUid;
+  GankUserModel currentUser;
 
   @override
   void initState() {
     // TODO: implement initState
-    currentUserUid = context.repository<UserRepository>().currentUser.uid;
+    currentUser = context.repository<UserRepository>().currentUser;
     super.initState();
   }
 
@@ -65,7 +69,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 17.0),
-            child: IconButton(icon: Icon(Icons.call), onPressed: () {}),
+            child: IconButton(icon: Icon(Icons.call), onPressed: () {
+              context.bloc<CallBloc>()..add(StartCall(userTo: widget.chatWithUser, userFrom: currentUser));
+              //Get.to(CallScreen(chatWithUser: widget.chatWithUser));
+            }),
           )
         ],
       ),
@@ -103,7 +110,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                               showDate = false;
                             }
                             bool isFromMe =
-                                messageModel.fromUid == currentUserUid;
+                                messageModel.fromUid == currentUser.uid;
                             return Column(
                               children: [
                                 if (showDate)
@@ -128,7 +135,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                                   child: Bubble(
                                     margin: BubbleEdges.only(top: 10),
                                     color: isFromMe
-                                        ? Color(0xFF054841)
+                                        ? Styles.whatsAppColor
                                         : Styles.cardColor,
                                     nip: isFromMe
                                         ? BubbleNip.rightTop
@@ -220,7 +227,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                           await context
                               .repository<ChatRepository>()
                               .sendMessage(textEditingController.text,
-                                  widget.chatWithUser.uid, currentUserUid);
+                                  widget.chatWithUser.uid, currentUser.uid);
                           textEditingController.text = '';
                           setState(() {});
                         },

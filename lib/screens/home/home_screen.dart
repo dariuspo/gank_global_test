@@ -1,16 +1,21 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'
     hide TabBar, TabBarIndicatorSize, TabBarView;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gank_global_test/blocs/auth/auth_bloc_components.dart';
+import 'package:gank_global_test/blocs/call/call_bloc_components.dart';
 import 'package:gank_global_test/custom_libs/tabs.dart';
 import 'package:gank_global_test/datas/tabs_data.dart';
 import 'package:gank_global_test/helpers/after_init.dart';
 import 'package:gank_global_test/helpers/styles.dart';
+import 'package:gank_global_test/helpers/user_repository.dart';
+import 'package:gank_global_test/models/call_model.dart';
 import 'package:gank_global_test/screens/home/tabs/account/account_screen.dart';
+import 'package:gank_global_test/screens/home/tabs/chat/call/pickup/pickup_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/chat_list/chat_list_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/cocktail/cocktail_screen.dart';
 import 'package:gank_global_test/widgets/containers/color_cover_gradient_widget.dart';
@@ -55,6 +60,24 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    return context.repository<AuthRepository>().currentUser == null
+        ? SizedBox.shrink()
+        : StreamBuilder<DocumentSnapshot>(
+            stream: context.repository<CallRepository>().callStream(
+                uid: context.repository<AuthRepository>().currentUser.uid),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data.data() != null) {
+                CallModel call = CallModel.fromJson(snapshot.data.data());
+                if (!call.hasDialled) {
+                  return PickupScreen(callModel: call);
+                }
+              }
+              return _buildHomeScreen();
+            },
+          );
+  }
+
+  Scaffold _buildHomeScreen() {
     return Scaffold(
       backgroundColor: Styles.backgroundColor,
       body: NestedScrollView(
@@ -172,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen>
           ];
         },
         body: Builder(
-          builder: (BuildContext context){
+          builder: (BuildContext context) {
             return SafeArea(
               bottom: false,
               top: false,

@@ -6,11 +6,13 @@ import 'package:gank_global_test/blocs/auth/auth_bloc.dart';
 import 'package:gank_global_test/blocs/auth/auth_event.dart';
 import 'package:gank_global_test/blocs/auth/auth_repository.dart';
 import 'package:gank_global_test/blocs/auth/auth_state.dart';
+import 'package:gank_global_test/blocs/call/call_bloc_components.dart';
 import 'package:gank_global_test/helpers/user_repository.dart';
 import 'package:gank_global_test/screens/home/home_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_bloc.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_bloc_components.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_repository.dart';
+import 'package:gank_global_test/screens/home/tabs/chat/call/call_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/chat_list/chat_list_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/cocktail/bloc/cocktail_bloc_components.dart';
 import 'package:gank_global_test/screens/welcome/welcome_screen.dart';
@@ -45,33 +47,44 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<UserRepository>(
           create: (context) => UserRepository(),
         ),
+        RepositoryProvider<CallRepository>(
+          create: (context) => CallRepository(),
+        ),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        themeMode: ThemeMode.dark,
-        navigatorKey: Get.key,
-        home: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => AuthBloc(
-                authRepository: context.repository<AuthRepository>(),
-                userRepository: context.repository<UserRepository>(),
-              )..add(CheckUser()),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthBloc(
+              authRepository: context.repository<AuthRepository>(),
+              userRepository: context.repository<UserRepository>(),
+            )..add(CheckUser()),
+          ),
+          BlocProvider(
+            create: (context) => ChatBloc(
+              chatRepository: context.repository<ChatRepository>(),
+              userRepository: context.repository<UserRepository>(),
             ),
-            BlocProvider(
-              create: (context) => ChatBloc(
-                chatRepository: context.repository<ChatRepository>(),
-                userRepository: context.repository<UserRepository>(),
-              ),
+          ),
+          BlocProvider(
+            create: (context) => CallBloc(
+              chatRepository: context.repository<ChatRepository>(),
+              userRepository: context.repository<UserRepository>(),
+              callRepository: context.repository<CallRepository>(),
             ),
-          ],
-          child: BlocConsumer<AuthBloc, AuthState>(
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          themeMode: ThemeMode.dark,
+          navigatorKey: Get.key,
+          home: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state.isLoggedIn) {
                 BlocProvider.of<ChatBloc>(context).add(LoginAgora(state.user));
               }
             },
             builder: (context, state) {
+              //return CallScreen();
               return state.isChecking
                   ? CircularProgressWidget()
                   : state.isLoggedOut

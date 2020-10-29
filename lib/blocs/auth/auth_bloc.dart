@@ -14,7 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     @required AuthRepository authRepository,
     @required UserRepository userRepository,
-  })  : assert(authRepository != null, userRepository != null),
+  })  : assert(authRepository != null && userRepository != null),
         _authRepository = authRepository,
         _userRepository = userRepository,
         super(AuthState.empty());
@@ -56,9 +56,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> _mapLoginToState() async* {
     try {
       yield AuthState.loading();
-      UserCredential userCredential = await _authRepository.login();
+      User user = await _authRepository.login();
       GankUserModel gankUserModel =
-          await _userRepository.getAndOrCreateUser(userCredential.user);
+          await _userRepository.getAndOrCreateUser(user);
       yield AuthState.loggedIn(gankUserModel);
     } catch (_) {}
   }
