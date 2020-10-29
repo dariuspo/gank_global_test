@@ -61,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    return _buildHomeScreen();
     return context.repository<AuthRepository>().currentUser == null
         ? SizedBox.shrink()
         : StreamBuilder<DocumentSnapshot>(
