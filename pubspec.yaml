@@ -28,6 +28,7 @@ dependencies:
   bloc: ^6.1.0
   bubble_tab_indicator: ^0.1.4
   chewie: ^0.9.10
+  circular_profile_avatar: ^1.0.6
   cloud_firestore: ^0.14.1+3
   equatable: ^1.2.5
   firebase_auth: ^0.18.1+2
@@ -40,7 +41,9 @@ dependencies:
   fluttertoast: ^7.1.1
   get: ^3.8.0
   http: ^0.12.2
+  rxdart: ^0.24.1
   video_player: 0.10.12+5
+  bubble: ^1.1.9+1
 
 
   # The following adds the Cupertino Icons font to your application.

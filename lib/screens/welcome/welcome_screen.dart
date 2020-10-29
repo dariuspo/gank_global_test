@@ -82,8 +82,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           ),
         ),
         BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state){
-            if(state.isLoading){
+          builder: (context, state) {
+            if (state.isLoading) {
               return CircularProgressIndicator();
             }
             return Align(
@@ -92,7 +92,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 padding: EdgeInsets.only(bottom: 200.h),
                 child: ElevatedRoundButton(
                   'Sign in anonymously',
-                      () {
+                  () {
                     _authBloc.add(Login());
                   },
                 ),

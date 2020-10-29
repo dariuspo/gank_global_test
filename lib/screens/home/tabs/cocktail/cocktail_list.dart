@@ -56,7 +56,7 @@ class _CocktailListState extends State<CocktailList> {
                             child: Column(
                               children: [
                                 Flexible(
-                                  flex:9,
+                                  flex: 9,
                                   child: Card(
                                     color: Styles.backgroundColor,
                                     shape: RoundedRectangleBorder(

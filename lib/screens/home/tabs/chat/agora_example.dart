@@ -53,7 +53,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
   void _createClient() async {
     _client =
-    await AgoraRtmClient.createInstance('1f528117448648b6b897fd2d0966ddc8');
+        await AgoraRtmClient.createInstance('1f528117448648b6b897fd2d0966ddc8');
     print(_client);
     _client.onMessageReceived = (AgoraRtmMessage message, String peerId) {
       _log("Peer msg: " + peerId + ", msg: " + message.text);
@@ -95,12 +95,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return Row(children: <Widget>[
       _isLogin
           ? new Expanded(
-          child: new Text('User Id: ' + _userNameController.text,
-              style: textStyle))
+              child: new Text('User Id: ' + _userNameController.text,
+                  style: textStyle))
           : new Expanded(
-          child: new TextField(
-              controller: _userNameController,
-              decoration: InputDecoration(hintText: 'Input your user id'))),
+              child: new TextField(
+                  controller: _userNameController,
+                  decoration: InputDecoration(hintText: 'Input your user id'))),
       new OutlineButton(
         child: Text(_isLogin ? 'Logout' : 'Login', style: textStyle),
         onPressed: _toggleLogin,
@@ -147,12 +147,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return Row(children: <Widget>[
       _isInChannel
           ? new Expanded(
-          child: new Text('Channel: ' + _channelNameController.text,
-              style: textStyle))
+              child: new Text('Channel: ' + _channelNameController.text,
+                  style: textStyle))
           : new Expanded(
-          child: new TextField(
-              controller: _channelNameController,
-              decoration: InputDecoration(hintText: 'Input channel id'))),
+              child: new TextField(
+                  controller: _channelNameController,
+                  decoration: InputDecoration(hintText: 'Input channel id'))),
       new OutlineButton(
         child: Text(_isInChannel ? 'Leave Channel' : 'Join Channel',
             style: textStyle),
@@ -193,15 +193,15 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return Expanded(
         child: Container(
             child: ListView.builder(
-              itemExtent: 24,
-              itemBuilder: (context, i) {
-                return ListTile(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  title: Text(_infoStrings[i]),
-                );
-              },
-              itemCount: _infoStrings.length,
-            )));
+      itemExtent: 24,
+      itemBuilder: (context, i) {
+        return ListTile(
+          contentPadding: const EdgeInsets.all(0.0),
+          title: Text(_infoStrings[i]),
+        );
+      },
+      itemCount: _infoStrings.length,
+    )));
   }
 
   void _toggleLogin() async {
@@ -244,7 +244,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
     }
     try {
       Map<dynamic, dynamic> result =
-      await _client.queryPeersOnlineStatus([peerUid]);
+          await _client.queryPeersOnlineStatus([peerUid]);
       _log('Query result: ' + result.toString());
     } catch (errorCode) {
       _log('Query error: ' + errorCode.toString());

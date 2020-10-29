@@ -6,6 +6,7 @@ import 'package:gank_global_test/blocs/auth/auth_bloc.dart';
 import 'package:gank_global_test/blocs/auth/auth_event.dart';
 import 'package:gank_global_test/blocs/auth/auth_repository.dart';
 import 'package:gank_global_test/blocs/auth/auth_state.dart';
+import 'package:gank_global_test/helpers/user_repository.dart';
 import 'package:gank_global_test/screens/home/home_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_bloc.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_bloc_components.dart';
@@ -19,7 +20,7 @@ import 'package:get/get.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.config(
-    defaultTransition: Transition.upToDown,
+    defaultTransition: Transition.rightToLeft,
     defaultDurationTransition: Duration(milliseconds: 250),
   );
   await Firebase.initializeApp();
@@ -30,32 +31,38 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      themeMode: ThemeMode.dark,
-      navigatorKey: Get.key,
-      home: MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider<CocktailRepository>(
-            create: (context) => CocktailRepository(),
-          ),
-          RepositoryProvider<AuthRepository>(
-            create: (context) => AuthRepository(),
-          ),
-          RepositoryProvider<ChatRepository>(
-            create: (context) => ChatRepository(),
-          ),
-        ],
-        child: MultiBlocProvider(
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<CocktailRepository>(
+          create: (context) => CocktailRepository(),
+        ),
+        RepositoryProvider<AuthRepository>(
+          create: (context) => AuthRepository(),
+        ),
+        RepositoryProvider<ChatRepository>(
+          create: (context) => ChatRepository(),
+        ),
+        RepositoryProvider<UserRepository>(
+          create: (context) => UserRepository(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        themeMode: ThemeMode.dark,
+        navigatorKey: Get.key,
+        home: MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) =>
-                  AuthBloc(authRepository: context.repository<AuthRepository>())
-                    ..add(CheckUser()),
+              create: (context) => AuthBloc(
+                authRepository: context.repository<AuthRepository>(),
+                userRepository: context.repository<UserRepository>(),
+              )..add(CheckUser()),
             ),
             BlocProvider(
               create: (context) => ChatBloc(
-                  chatRepository: context.repository<ChatRepository>()),
+                chatRepository: context.repository<ChatRepository>(),
+                userRepository: context.repository<UserRepository>(),
+              ),
             ),
           ],
           child: BlocConsumer<AuthBloc, AuthState>(

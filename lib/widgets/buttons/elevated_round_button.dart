@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gank_global_test/helpers/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class ElevatedRoundButton extends StatelessWidget {
   final String title;
   final Function onPressed;

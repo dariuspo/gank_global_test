@@ -3,7 +3,6 @@ class TabModel {
   final String bgImage;
   final String title;
 
-
   TabModel({
     this.frontImage,
     this.bgImage,

@@ -6,7 +6,6 @@ class AuthRepository {
 
   AuthRepository();
 
-
   Future<User> getCurrentUser() async {
     User user = _firebaseAuth.currentUser;
     return user;

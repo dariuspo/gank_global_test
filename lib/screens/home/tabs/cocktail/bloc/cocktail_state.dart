@@ -21,9 +21,7 @@ class CocktailLoaded extends CocktailState {
     this.cocktails,
   });
 
-  CocktailLoaded copyWith({
-    List<CocktailModel> cocktails
-  }) {
+  CocktailLoaded copyWith({List<CocktailModel> cocktails}) {
     return CocktailLoaded(
       cocktails: cocktails ?? this.cocktails,
     );

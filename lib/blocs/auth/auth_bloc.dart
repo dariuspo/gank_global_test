@@ -11,7 +11,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthRepository _authRepository;
   UserRepository _userRepository;
 
-
   AuthBloc({
     @required AuthRepository authRepository,
     @required UserRepository userRepository,
@@ -38,7 +37,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user == null) {
         yield AuthState.loggedOut();
       } else {
-        GankUserModel gankUserModel = await _userRepository.getAndOrCreateUser(user);
+        GankUserModel gankUserModel =
+            await _userRepository.getAndOrCreateUser(user);
         yield AuthState.loggedIn(gankUserModel);
       }
     } catch (_) {
@@ -57,7 +57,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       yield AuthState.loading();
       UserCredential userCredential = await _authRepository.login();
-      GankUserModel gankUserModel = await _userRepository.getAndOrCreateUser(userCredential.user);
+      GankUserModel gankUserModel =
+          await _userRepository.getAndOrCreateUser(userCredential.user);
       yield AuthState.loggedIn(gankUserModel);
     } catch (_) {}
   }

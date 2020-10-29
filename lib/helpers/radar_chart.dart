@@ -42,13 +42,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   darkMode
                       ? Text(
-                    'Light mode',
-                    style: TextStyle(color: Colors.white),
-                  )
+                          'Light mode',
+                          style: TextStyle(color: Colors.white),
+                        )
                       : Text(
-                    'Dark mode',
-                    style: TextStyle(color: Colors.black),
-                  ),
+                          'Dark mode',
+                          style: TextStyle(color: Colors.black),
+                        ),
                   Switch(
                     value: this.darkMode,
                     onChanged: (value) {
@@ -67,17 +67,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   useSides
                       ? Text(
-                    'Polygon border',
-                    style: darkMode
-                        ? TextStyle(color: Colors.white)
-                        : TextStyle(color: Colors.black),
-                  )
+                          'Polygon border',
+                          style: darkMode
+                              ? TextStyle(color: Colors.white)
+                              : TextStyle(color: Colors.black),
+                        )
                       : Text(
-                    'Circular border',
-                    style: darkMode
-                        ? TextStyle(color: Colors.white)
-                        : TextStyle(color: Colors.black),
-                  ),
+                          'Circular border',
+                          style: darkMode
+                              ? TextStyle(color: Colors.white)
+                              : TextStyle(color: Colors.black),
+                        ),
                   Switch(
                     value: this.useSides,
                     onChanged: (value) {
@@ -118,19 +118,19 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
               child: darkMode
                   ? RadarChart.dark(
-                ticks: ticks,
-                features: features,
-                data: data,
-                reverseAxis: true,
-                useSides: useSides,
-              )
+                      ticks: ticks,
+                      features: features,
+                      data: data,
+                      reverseAxis: true,
+                      useSides: useSides,
+                    )
                   : RadarChart.light(
-                ticks: ticks,
-                features: features,
-                data: data,
-                reverseAxis: true,
-                useSides: useSides,
-              ),
+                      ticks: ticks,
+                      features: features,
+                      data: data,
+                      reverseAxis: true,
+                      useSides: useSides,
+                    ),
             ),
           ],
         ),

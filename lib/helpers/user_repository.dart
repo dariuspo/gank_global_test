@@ -5,6 +5,7 @@ import 'package:gank_global_test/models/gank_user_model.dart';
 class UserRepository {
   final _firestoreInstance = FirebaseFirestore.instance;
   CollectionReference _userCollection;
+  GankUserModel currentUser;
 
   UserRepository() {
     _userCollection = _firestoreInstance.collection('users');
@@ -13,24 +14,33 @@ class UserRepository {
   Future<GankUserModel> getAndOrCreateUser(User user) async {
     final doc = await _userCollection.doc(user.uid).get();
     if (doc.data() == null) {
-      final gankUser = GankUserModel(uid: user.uid, name: user.uid.substring(0, 6));
-      await saveUser(gankUser);
-      return gankUser;
+      currentUser =
+          GankUserModel(uid: user.uid, name: user.uid.substring(0, 6));
+      await saveUser(currentUser);
+    } else {
+      currentUser = GankUserModel.fromJson(doc.data());
     }
-    return GankUserModel.fromJson(doc.data());
+    return currentUser;
   }
 
   saveUser(GankUserModel gankUser) async {
     _userCollection.doc(gankUser.uid).set(gankUser.toJson());
   }
 
-  Future<List<GankUserModel>> getCategories() async {
-    QuerySnapshot querySnapshot =
-    await _quoteCollection.where('isActive', isEqualTo: true).get();
-    logger.i("quotes fetched: ${querySnapshot.docs.length}");
+  /*Future<List<GankUserModel>> getUsers() async {
+    QuerySnapshot querySnapshot = await _userCollection.get();
+    print("user fetched: ${querySnapshot.docs.length}");
     return querySnapshot.docs.map((e) {
-      return Category.fromJson(e.data());
+      return GankUserModel.fromJson(e.data());
     }).toList();
-  }
+  }*/
 
+  Stream<List<GankUserModel>> getUsers(GankUserModel currentUser) async* {
+    await for (QuerySnapshot data in _userCollection.snapshots()) {
+      final list =
+          data.docs.map((doc) => GankUserModel.fromJson(doc.data())).toList();
+      list.removeWhere((element) => element.uid == currentUser.uid);
+      yield list;
+    }
+  }
 }

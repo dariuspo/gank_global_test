@@ -7,10 +7,13 @@ abstract class ChatState extends Equatable {
   @override
   List<Object> get props => [];
 }
-class InitialState extends ChatState{}
-class LoginState extends ChatState{}
-class LoggedIn extends ChatState{
-  final List<GankUserModel> gankUserModels;
+
+class InitialState extends ChatState {}
+
+class LoginState extends ChatState {}
+
+class LoggedIn extends ChatState {
+  final Stream<List<GankUserModel>> gankUserModels;
 
   LoggedIn({this.gankUserModels});
 

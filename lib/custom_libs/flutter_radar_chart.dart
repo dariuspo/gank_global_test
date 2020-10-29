@@ -256,9 +256,7 @@ class RadarChartPainter extends CustomPainter {
         ..paint(canvas, Offset(centerX, centerY - ticksTextStyle.fontSize));
     }
 
-    tickLabels
-        .asMap()
-        .forEach((index, tick) {
+    tickLabels.asMap().forEach((index, tick) {
       var tickRadius = tickDistance * (ticks.length - index);
       canvas.drawPath(variablePath(size, tickRadius, this.sides),
           ticksPainter[ticks.length - index - 1]);

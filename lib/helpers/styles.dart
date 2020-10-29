@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class Styles {
   //color style
   static final Color accentColor = Color(0xFFBBD243);
   static final Color backgroundColor = Color(0xFF0F1620);
+  static final Color cardColor = Color(0xFF222C35);
   static final Color buttonColor = Color(0xFF6441A5);
   static final Color radarColor = Color(0xFFD35F60);
 
@@ -21,7 +21,6 @@ class Styles {
   );
   //end of color style
 
-
   //text style
   static final textButton = TextStyle(
     color: Colors.white,
@@ -33,11 +32,11 @@ class Styles {
 
   //spacer style
 
-  static SizedBox miniSpace = SizedBox(height: 6.h, width: 6.w);
-  static SizedBox smallSpace = SizedBox(height: 12.h, width: 12.w);
-  static SizedBox mediumSpace = SizedBox(height: 24.h, width: 24.w);
-  static SizedBox bigSpace = SizedBox(height: 40.h);
-  static SizedBox hugeSpace = SizedBox(height: 80.h);
+  static SizedBox miniSpace = SizedBox(height: 6, width: 6);
+  static SizedBox smallSpace = SizedBox(height: 12, width: 12);
+  static SizedBox mediumSpace = SizedBox(height: 24, width: 24);
+  static SizedBox bigSpace = SizedBox(height: 40, width: 40,);
+  static SizedBox hugeSpace = SizedBox(height: 80, width: 40,);
   //end of spacer
 
 }
