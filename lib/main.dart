@@ -66,9 +66,9 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
+            lazy: false,
             create: (context) => CallBloc(
-              chatRepository: context.repository<ChatRepository>(),
-              userRepository: context.repository<UserRepository>(),
+              authRepository: context.repository<AuthRepository>(),
               callRepository: context.repository<CallRepository>(),
             ),
           ),
@@ -81,6 +81,7 @@ class MyApp extends StatelessWidget {
             listener: (context, state) {
               if (state.isLoggedIn) {
                 BlocProvider.of<ChatBloc>(context).add(LoginAgora(state.user));
+                BlocProvider.of<CallBloc>(context).add(Called());
               }
             },
             builder: (context, state) {

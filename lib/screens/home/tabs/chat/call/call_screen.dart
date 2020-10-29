@@ -37,7 +37,7 @@ class _CallScreenState extends State<CallScreen> {
   @override
   void initState() {
     super.initState();
-    addPostFrameCallback();
+    //addPostFrameCallback();
     initializeAgora();
   }
 
@@ -216,7 +216,7 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   void dispose() {
-    callStreamSubscription.cancel();
+    //callStreamSubscription.cancel();
     engine?.leaveChannel();
     engine?.destroy();
     super.dispose();

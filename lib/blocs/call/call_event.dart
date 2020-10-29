@@ -17,5 +17,5 @@ class StartCall extends CallEvent {
 
 }
 
-class EndCall extends CallEvent {}
+class Called extends CallEvent {}
 
