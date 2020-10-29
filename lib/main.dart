@@ -7,7 +7,11 @@ import 'package:gank_global_test/blocs/auth/auth_event.dart';
 import 'package:gank_global_test/blocs/auth/auth_repository.dart';
 import 'package:gank_global_test/blocs/auth/auth_state.dart';
 import 'package:gank_global_test/screens/home/home_screen.dart';
-import 'package:gank_global_test/screens/home/tabs/cocktail/bloc/bloc.dart';
+import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_bloc.dart';
+import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_bloc_components.dart';
+import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_repository.dart';
+import 'package:gank_global_test/screens/home/tabs/chat/chat_list/chat_list_screen.dart';
+import 'package:gank_global_test/screens/home/tabs/cocktail/bloc/cocktail_bloc_components.dart';
 import 'package:gank_global_test/screens/welcome/welcome_screen.dart';
 import 'package:gank_global_test/widgets/animations/circular_progress_widget.dart';
 import 'package:get/get.dart';
@@ -38,14 +42,29 @@ class MyApp extends StatelessWidget {
           RepositoryProvider<AuthRepository>(
             create: (context) => AuthRepository(),
           ),
+          RepositoryProvider<ChatRepository>(
+            create: (context) => ChatRepository(),
+          ),
         ],
-        child: BlocProvider(
-          create: (context) =>
-              AuthBloc(authRepository: context.repository<AuthRepository>())..add(CheckUser()),
-          child: BlocBuilder<AuthBloc, AuthState>(
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) =>
+                  AuthBloc(authRepository: context.repository<AuthRepository>())
+                    ..add(CheckUser()),
+            ),
+            BlocProvider(
+              create: (context) => ChatBloc(
+                  chatRepository: context.repository<ChatRepository>()),
+            ),
+          ],
+          child: BlocConsumer<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if (state.isLoggedIn) {
+                BlocProvider.of<ChatBloc>(context).add(LoginAgora(state.user));
+              }
+            },
             builder: (context, state) {
-              print(state.isChecking);
-              print(state.isLoggedOut);
               return state.isChecking
                   ? CircularProgressWidget()
                   : state.isLoggedOut

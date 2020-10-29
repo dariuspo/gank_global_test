@@ -2,7 +2,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gank_global_test/blocs/auth/bloc.dart';
+import 'package:gank_global_test/blocs/auth/auth_bloc_components.dart';
 import 'package:gank_global_test/helpers/after_init.dart';
 import 'package:gank_global_test/helpers/styles.dart';
 import 'package:gank_global_test/screens/home/home_screen.dart';

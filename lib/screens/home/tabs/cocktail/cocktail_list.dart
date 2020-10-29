@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gank_global_test/helpers/styles.dart';
 import 'package:gank_global_test/models/cocktail_model.dart';
-import 'package:gank_global_test/screens/home/tabs/cocktail/bloc/bloc.dart';
+import 'package:gank_global_test/screens/home/tabs/cocktail/bloc/cocktail_bloc_components.dart';
 import 'package:gank_global_test/widgets/animations/circular_progress_widget.dart';
 
 class CocktailList extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gank_global_test/screens/home/tabs/cocktail/cocktail_list.dart';
 
-import 'bloc/bloc.dart';
+import 'bloc/cocktail_bloc_components.dart';
 
 class CocktailScreen extends StatelessWidget {
   final BuildContext context;

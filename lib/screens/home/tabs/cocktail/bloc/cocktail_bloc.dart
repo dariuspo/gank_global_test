@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:gank_global_test/screens/home/tabs/cocktail/bloc/bloc.dart';
+import 'package:gank_global_test/screens/home/tabs/cocktail/bloc/cocktail_bloc_components.dart';
 
 class CocktailBloc extends Bloc<CocktailEvent, CocktailState> {
   final CocktailRepository _cocktailRepository;

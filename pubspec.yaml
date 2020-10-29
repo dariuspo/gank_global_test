@@ -23,22 +23,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^0.5.0+1
-  firebase_auth: ^0.18.1+2
-  bloc: ^6.1.0
-  flutter_bloc: ^6.0.6
-  agora_rtm: ^0.9.14
   agora_rtc_engine: ^3.1.3
-  flutter_screenutil: ^3.2.0
-  chewie: ^0.9.10
-  video_player: 0.10.12+5
-  get: ^3.8.0
-  flutter_swiper: ^1.1.6
+  agora_rtm: ^0.9.14
+  bloc: ^6.1.0
   bubble_tab_indicator: ^0.1.4
-  flutter_radar_chart: ^0.1.6
+  chewie: ^0.9.10
+  cloud_firestore: ^0.14.1+3
   equatable: ^1.2.5
-  http: ^0.12.2
+  firebase_auth: ^0.18.1+2
+  firebase_core: ^0.5.0+1
+  flutter_bloc: ^6.0.6
+  flutter_radar_chart: ^0.1.6
+  flutter_screenutil: ^3.2.0
   flutter_staggered_animations: ^0.1.2
+  flutter_swiper: ^1.1.6
+  fluttertoast: ^7.1.1
+  get: ^3.8.0
+  http: ^0.12.2
+  video_player: 0.10.12+5
 
 
   # The following adds the Cupertino Icons font to your application.

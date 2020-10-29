@@ -5,12 +5,12 @@ import 'package:flutter/material.dart'
     hide TabBar, TabBarIndicatorSize, TabBarView;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gank_global_test/blocs/auth/bloc.dart';
+import 'package:gank_global_test/blocs/auth/auth_bloc_components.dart';
 import 'package:gank_global_test/custom_libs/tabs.dart';
 import 'package:gank_global_test/datas/tabs_data.dart';
 import 'package:gank_global_test/helpers/after_init.dart';
 import 'package:gank_global_test/helpers/styles.dart';
-import 'file:///C:/Users/Lenovo/Work/Source/gank_global_test/lib/screens/home/tabs/account/account_screen.dart';
+import 'package:gank_global_test/screens/home/tabs/account/account_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/cocktail/cocktail_screen.dart';
 import 'package:gank_global_test/widgets/containers/color_cover_gradient_widget.dart';
 
@@ -42,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen>
     ScreenUtil.init(context,
         designSize: Size(1080, 2400), allowFontScaling: true);
     _authBloc = BlocProvider.of<AuthBloc>(context);
-
   }
 
   @override

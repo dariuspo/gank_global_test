@@ -1,14 +1,23 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gank_global_test/helpers/user_repository.dart';
+import 'package:gank_global_test/models/gank_user_model.dart';
 import 'package:meta/meta.dart';
-import 'package:gank_global_test/blocs/auth/bloc.dart';
+import 'package:gank_global_test/blocs/auth/auth_bloc_components.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthRepository _authRepository;
+  UserRepository _userRepository;
 
-  AuthBloc({@required AuthRepository authRepository})
-      : assert(authRepository != null),
+
+  AuthBloc({
+    @required AuthRepository authRepository,
+    @required UserRepository userRepository,
+  })  : assert(authRepository != null, userRepository != null),
         _authRepository = authRepository,
+        _userRepository = userRepository,
         super(AuthState.empty());
 
   @override
@@ -29,7 +38,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user == null) {
         yield AuthState.loggedOut();
       } else {
-        yield AuthState.loggedIn();
+        GankUserModel gankUserModel = await _userRepository.getAndOrCreateUser(user);
+        yield AuthState.loggedIn(gankUserModel);
       }
     } catch (_) {
       yield AuthState.loggedOut();
@@ -46,8 +56,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> _mapLoginToState() async* {
     try {
       yield AuthState.loading();
-      await _authRepository.login();
-      yield AuthState.loggedIn();
+      UserCredential userCredential = await _authRepository.login();
+      GankUserModel gankUserModel = await _userRepository.getAndOrCreateUser(userCredential.user);
+      yield AuthState.loggedIn(gankUserModel);
     } catch (_) {}
   }
 }
