@@ -19,6 +19,7 @@ import 'package:gank_global_test/screens/home/tabs/chat/call/pickup/pickup_scree
 import 'package:gank_global_test/screens/home/tabs/chat/chat_list/chat_list_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/cocktail/cocktail_screen.dart';
 import 'package:gank_global_test/widgets/containers/color_cover_gradient_widget.dart';
+import 'package:rxdart/rxdart.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -30,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen>
   TabController _tabController;
   ScrollController _scrollViewController;
   double _top = 0.0;
-  StreamController<int> _streamController = StreamController<int>()..add(0);
+  StreamController<int> _streamController = BehaviorSubject()..add(0);
   AuthBloc _authBloc;
 
   @override
