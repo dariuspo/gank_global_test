@@ -44,6 +44,7 @@ dependencies:
   rxdart: ^0.24.1
   video_player: 0.10.12+5
   bubble: ^1.1.9+1
+  permission_handler: ^5.0.1+1
 
 
   # The following adds the Cupertino Icons font to your application.
