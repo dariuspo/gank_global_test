@@ -15,6 +15,7 @@ import 'package:gank_global_test/models/call_model.dart';
 import 'package:gank_global_test/models/gank_user_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CallScreen extends StatefulWidget {
   final CallModel callModel;
@@ -61,6 +62,8 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   Future<void> initializeAgora() async {
+    await [Permission.camera, Permission.microphone, Permission.storage]
+        .request();
     engine = await RtcEngine.create(APP_ID);
     engine.setEventHandler(RtcEngineEventHandler(
         joinChannelSuccess: (String channel, int uid, int elapsed) {
