@@ -43,17 +43,17 @@ class ChatRepository {
     };
   }
 
-  initMapStream(String peerId) async {
+  Future<bool> initMapStream(String peerId) async {
     if (mapStreamChat[peerId] == null) {
-      print('map stream null');
+      mapStreamChat[peerId] = BehaviorSubject();
       print(Utils.getChatRoomId(currentUid, peerId));
       List<MessageModel> messages =
           await getMessage(Utils.getChatRoomId(currentUid, peerId));
       print('after get messages');
       print(messages.length);
-      mapStreamChat[peerId] = BehaviorSubject();
       mapStreamChat[peerId].add(messages ?? []);
-    }
+      return true;
+    } return false;
   }
 
   Future<List<MessageModel>> getMessage(String channelId) async {
@@ -68,12 +68,11 @@ class ChatRepository {
   }
 
   addReceivedMessageToStream(String text, String toUid) async{
-    await initMapStream(toUid);
+    bool isFirstTime = await initMapStream(toUid);
+    if(isFirstTime) return;
     List<MessageModel> messages = [];
     messages.addAll(mapStreamChat[toUid].value);
-
     messages.add(MessageModel(message: text, dateTime: DateTime.now(), fromUid: toUid));
-    print(messages.length);
     mapStreamChat[toUid].add(messages);
   }
 
