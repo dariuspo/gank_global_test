@@ -36,7 +36,8 @@ class ChatRepository {
       if (currentOpenChannelId == channelId) {
         //markMessageAsRead(channelId);
       } else {
-        Get.snackbar('new message from ${fromUid.substring(0, 6)}', message.text,
+        Get.snackbar(
+            'new message from ${fromUid.substring(0, 6)}', message.text,
             colorText: Colors.white);
       }
       addReceivedMessageToStream(message.text, fromUid);
@@ -105,6 +106,7 @@ class ChatRepository {
     mapStreamChat[toUid].add(messages);
   }
 
+  //send message to peer
   sendMessage(String text, String toUid, String fromUid) async {
     addMessageToStream(text, toUid, fromUid);
     try {
@@ -129,11 +131,11 @@ class ChatRepository {
     }
   }
 
+  //check online status using RTM
   Future<bool> isOnline(String uid) async {
     try {
       Map<String, dynamic> response =
           await _client.queryPeersOnlineStatus([uid]);
-      print(response[uid]);
       return response[uid];
     } catch (e) {}
     return false;
@@ -141,15 +143,14 @@ class ChatRepository {
 
   //get list users to chat with
   Stream<MessageModel> getLatestMessage(String channelId) async* {
-    print('listen to $channelId');
     await for (QuerySnapshot data in messagesCollection
         .orderBy("dateTime", descending: true)
         .where('channelId', isEqualTo: channelId)
         .limit(1)
         .snapshots()) {
-      print('new snapshot ${data.docs.length}');
-      if(data.docs.isNotEmpty){
-        final list = data.docs.map((doc) => MessageModel.fromJson(doc.data())).toList();
+      if (data.docs.isNotEmpty) {
+        final list =
+            data.docs.map((doc) => MessageModel.fromJson(doc.data())).toList();
         yield list[0];
       }
     }

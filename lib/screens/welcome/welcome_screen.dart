@@ -63,7 +63,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           controller: _chewieController,
         ),
         ColorCoverGradientWidget(),
-        _buildLogo(),
+        BuildLogo(),
         _buildSignInButton()
       ],
     );
@@ -92,8 +92,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 }
 
-class _buildLogo extends StatelessWidget {
-  const _buildLogo({
+class BuildLogo extends StatelessWidget {
+  const BuildLogo({
     Key key,
   }) : super(key: key);
 
