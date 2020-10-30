@@ -8,6 +8,7 @@ import 'package:gank_global_test/blocs/call/call_bloc_components.dart';
 import 'package:gank_global_test/helpers/styles.dart';
 import 'package:gank_global_test/helpers/extensions.dart';
 import 'package:gank_global_test/helpers/user_repository.dart';
+import 'package:gank_global_test/helpers/utils.dart';
 import 'package:gank_global_test/models/gank_user_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gank_global_test/models/message_model.dart';
@@ -36,7 +37,15 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   @override
   void initState() {
     currentUser = context.repository<UserRepository>().currentUser;
+    currentOpenChannelId = Utils.getChatRoomId(currentUser.uid, widget.chatWithUser.uid);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    currentOpenChannelId = '';
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -227,8 +236,8 @@ class _InputTextChatState extends State<InputTextChat> {
   @override
   void initState() {
     // TODO: implement initState
-
     currentUser = context.repository<UserRepository>().currentUser;
+
     super.initState();
   }
 

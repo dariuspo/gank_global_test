@@ -4,16 +4,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthRepository {
   final _firebaseAuth = FirebaseAuth.instance;
   final CollectionReference _userCollection =
-      FirebaseFirestore.instance.collection('users');
+  FirebaseFirestore.instance.collection('users');
   User currentUser;
 
   AuthRepository() {
     _firebaseAuth.authStateChanges().listen((user) async {
       if (user != null) {
-        await _userCollection.doc(user.uid).set(
-          {'lastLogin': Timestamp.fromDate(DateTime.now())},
-          SetOptions(merge: true),
-        );
+        try{
+          await _userCollection.doc(user.uid).update(
+            {'lastLogin': Timestamp.fromDate(DateTime.now())},
+          );
+        }catch(e){
+          print(e);
+        }
       }
     });
   }

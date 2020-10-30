@@ -31,9 +31,16 @@ class ChatRepository {
     _client = await AgoraRtmClient.createInstance(APP_ID);
     //detect when there is incoming messages
     _client.onMessageReceived = (AgoraRtmMessage message, String fromUid) {
+      String channelId = Utils.getChatRoomId(currentUid, fromUid);
+
+      if (currentOpenChannelId == channelId) {
+        //markMessageAsRead(channelId);
+      } else {
+        Get.snackbar('new message from ${fromUid.substring(0, 6)}', message.text,
+            colorText: Colors.white);
+      }
       addReceivedMessageToStream(message.text, fromUid);
-      Get.snackbar('new message from ${fromUid.substring(0, 6)}', message.text,
-          colorText: Colors.white);
+
       print("Peer msg: " + fromUid + ", msg: " + message.text);
     };
     //detect connection change
