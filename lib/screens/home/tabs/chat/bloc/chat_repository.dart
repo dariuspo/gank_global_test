@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:agora_rtm/agora_rtm.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:gank_global_test/configs/agora_configs.dart';
 import 'package:gank_global_test/helpers/utils.dart';
 import 'package:gank_global_test/models/message_model.dart';
+import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ChatRepository {
@@ -13,6 +15,8 @@ class ChatRepository {
 
   AgoraRtmClient _client;
   Map<String, BehaviorSubject<List<MessageModel>>> mapStreamChat = {};
+  //Map<String, BehaviorSubject<List<MessageModel>>> mapStreamChat = {};
+
   String currentUid;
 
   Future<BehaviorSubject<List<MessageModel>>> getMapStreamChat(
@@ -22,26 +26,28 @@ class ChatRepository {
   }
 
   init() async {
+    //initialize agora here
     _client = await AgoraRtmClient.createInstance(APP_ID);
+    //detect when there is incoming messages
     _client.onMessageReceived = (AgoraRtmMessage message, String fromUid) {
       addReceivedMessageToStream(message.text, fromUid);
+      Get.snackbar(
+        'new message from ${fromUid.substring(0, 6)}',
+        message.text,
+        colorText: Colors.white
+      );
       print("Peer msg: " + fromUid + ", msg: " + message.text);
     };
+    //detect connection change
     _client.onConnectionStateChanged = (int state, int reason) {
       print('Connection state changed: ' +
           state.toString() +
           ', reason: ' +
           reason.toString());
-      if (state == 5) {
-        /*_client.logout();
-        _log('Logout.');
-        setState(() {
-          _isLogin = false;
-        });*/
-      }
     };
   }
 
+  //init map stream to get stream of chats
   Future<bool> initMapStream(String peerId) async {
     if (mapStreamChat[peerId] == null) {
       mapStreamChat[peerId] = BehaviorSubject();
@@ -53,6 +59,7 @@ class ChatRepository {
     return false;
   }
 
+  //get message saved in firebase for persistent message
   Future<List<MessageModel>> getMessage(String channelId) async {
     QuerySnapshot querySnapshot = await messagesCollection
         .orderBy("dateTime", descending: false)
@@ -63,6 +70,7 @@ class ChatRepository {
     return list;
   }
 
+  //this method handle incoming message
   addReceivedMessageToStream(String text, String toUid) async {
     bool isFirstTime = await initMapStream(toUid);
     if (isFirstTime) return;
@@ -73,6 +81,7 @@ class ChatRepository {
     mapStreamChat[toUid].add(messages);
   }
 
+  //this method handle outcoming messages
   addMessageToStream(String text, String toUid, String fromUid) async {
     await initMapStream(toUid);
     List<MessageModel> messages = [];
@@ -103,6 +112,7 @@ class ChatRepository {
     }
   }
 
+  //login agora
   agoraLogin(String uid) async {
     try {
       currentUid = uid;

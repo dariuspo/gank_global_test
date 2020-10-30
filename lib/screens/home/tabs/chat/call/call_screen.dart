@@ -50,6 +50,8 @@ class _CallScreenState extends State<CallScreen> {
           .listen((DocumentSnapshot ds) {
         switch (ds.data()) {
           case null:
+            engine?.leaveChannel();
+            engine?.destroy();
             Navigator.pop(context);
             break;
           default:
@@ -139,88 +141,88 @@ class _CallScreenState extends State<CallScreen> {
 
   Expanded _buildProfileImage() {
     return Expanded(
-            flex: 7,
-            child: Center(
-              child: CircularProfileAvatar(
-                '',
-                radius: 300.w,
-                backgroundColor: Colors.primaries[1],
-                initialsText: Text(
-                  widget.callModel.hasDialled
-                      ? widget.callModel.receiverName[0]
-                      : widget.callModel.callerName[0],
-                  style: TextStyle(fontSize: 200.sp, color: Colors.white),
-                ),
-                elevation: 5.0,
-                cacheImage: true,
-                showInitialTextAbovePicture: true,
-              ),
-            ),
-          );
+      flex: 7,
+      child: Center(
+        child: CircularProfileAvatar(
+          '',
+          radius: 300.w,
+          backgroundColor: Colors.primaries[1],
+          initialsText: Text(
+            widget.callModel.hasDialled
+                ? widget.callModel.receiverName[0]
+                : widget.callModel.callerName[0],
+            style: TextStyle(fontSize: 200.sp, color: Colors.white),
+          ),
+          elevation: 5.0,
+          cacheImage: true,
+          showInitialTextAbovePicture: true,
+        ),
+      ),
+    );
   }
 
   Expanded _buildControl(BuildContext context) {
     return Expanded(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ClipOval(
-                  child: Material(
-                    color: Colors.red, // button color
-                    child: InkWell(
-                      child: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: Icon(
-                            noVoice ? Icons.volume_off : Icons.volume_up,
-                            color: Colors.white,
-                          )),
-                      onTap: () async {
-                        _onToggleVoice();
-                      },
-                    ),
-                  ),
-                ),
-                ClipOval(
-                  child: Material(
-                    color: Colors.red, // button color
-                    child: InkWell(
-                      child: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: Icon(
-                            Icons.call_end,
-                            color: Colors.white,
-                          )),
-                      onTap: () async {
-                        context
-                            .repository<CallRepository>()
-                            .endCall(call: widget.callModel);
-                      },
-                    ),
-                  ),
-                ),
-                ClipOval(
-                  child: Material(
-                    color: Colors.red, // button color
-                    child: InkWell(
-                      child: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: Icon(
-                            muted ? Icons.mic_off : Icons.mic,
-                            color: Colors.white,
-                          )),
-                      onTap: () async {
-                        _onToggleMute();
-                      },
-                    ),
-                  ),
-                ),
-              ],
+      flex: 3,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ClipOval(
+            child: Material(
+              color: Colors.red, // button color
+              child: InkWell(
+                child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Icon(
+                      noVoice ? Icons.volume_off : Icons.volume_up,
+                      color: Colors.white,
+                    )),
+                onTap: () async {
+                  _onToggleVoice();
+                },
+              ),
             ),
-          );
+          ),
+          ClipOval(
+            child: Material(
+              color: Colors.red, // button color
+              child: InkWell(
+                child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Icon(
+                      Icons.call_end,
+                      color: Colors.white,
+                    )),
+                onTap: () async {
+                  context
+                      .repository<CallRepository>()
+                      .endCall(call: widget.callModel);
+                },
+              ),
+            ),
+          ),
+          ClipOval(
+            child: Material(
+              color: Colors.red, // button color
+              child: InkWell(
+                child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Icon(
+                      muted ? Icons.mic_off : Icons.mic,
+                      color: Colors.white,
+                    )),
+                onTap: () async {
+                  _onToggleMute();
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _onToggleMute() {

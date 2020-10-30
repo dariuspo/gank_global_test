@@ -45,92 +45,99 @@ class _PickupScreenState extends State<PickupScreen> {
       ),
       body: Column(
         children: [
-          Container(
-            color: Styles.whatsAppColor,
-            child: Center(
-              child: Column(
-                children: [
-                  CircularProfileAvatar(
-                    '',
-                    radius: 120.w,
-                    backgroundColor: Colors.primaries[Random().nextInt(10 - 0)],
-                    initialsText: Text(
-                      widget.callModel.callerName[0],
-                      style: TextStyle(fontSize: 80.sp, color: Colors.white),
-                    ),
-                    elevation: 5.0,
-                    cacheImage: true,
-                    showInitialTextAbovePicture: true,
-                  ),
-                  Styles.mediumSpace,
-                  Text(
-                    widget.callModel.callerName,
-                    style: Styles.heading3,
-                  ),
-                  Styles.mediumSpace,
-                  Text(
-                    'Whatsapp voice call',
-                    style:
-                        Styles.heading5.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                  Styles.mediumSpace,
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(bottom: 100.h),
-              color: Styles.backgroundColor,
-              alignment: Alignment.bottomCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ClipOval(
-                    child: Material(
-                      color: Color(0xFF09D262), // button color
-                      child: InkWell(
-                        child: SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: Icon(
-                            Icons.phone,
-                            color: Colors.white,
-                          ),
-                        ),
-                        onTap: () async {
-                          Get.off(CallScreen(
-                            callModel: widget.callModel,
-                          ));
-                        },
-                      ),
-                    ),
-                  ),
-                  ClipOval(
-                    child: Material(
-                      color: Colors.red, // button color
-                      child: InkWell(
-                        child: SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: Icon(
-                            Icons.call_end,
-                            color: Colors.white,
-                          ),
-                        ),
-                        onTap: () async {
-                          context
-                              .repository<CallRepository>()
-                              .endCall(call: widget.callModel);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          _buildCallerHeader(),
+          _buildAcceptRejectButton(context),
         ],
+      ),
+    );
+  }
+
+  Expanded _buildAcceptRejectButton(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.only(bottom: 100.h),
+        color: Styles.backgroundColor,
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ClipOval(
+              child: Material(
+                color: Color(0xFF09D262), // button color
+                child: InkWell(
+                  child: SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: Icon(
+                      Icons.phone,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onTap: () async {
+                    Get.off(CallScreen(
+                      callModel: widget.callModel,
+                    ));
+                  },
+                ),
+              ),
+            ),
+            ClipOval(
+              child: Material(
+                color: Colors.red, // button color
+                child: InkWell(
+                  child: SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: Icon(
+                      Icons.call_end,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onTap: () async {
+                    context
+                        .repository<CallRepository>()
+                        .endCall(call: widget.callModel);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container _buildCallerHeader() {
+    return Container(
+      color: Styles.whatsAppColor,
+      child: Center(
+        child: Column(
+          children: [
+            CircularProfileAvatar(
+              '',
+              radius: 120.w,
+              backgroundColor: Colors.primaries[Random().nextInt(10 - 0)],
+              initialsText: Text(
+                widget.callModel.callerName[0],
+                style: TextStyle(fontSize: 80.sp, color: Colors.white),
+              ),
+              elevation: 5.0,
+              cacheImage: true,
+              showInitialTextAbovePicture: true,
+            ),
+            Styles.mediumSpace,
+            Text(
+              widget.callModel.callerName,
+              style: Styles.heading3,
+            ),
+            Styles.mediumSpace,
+            Text(
+              'Whatsapp voice call',
+              style: Styles.heading5.copyWith(fontStyle: FontStyle.italic),
+            ),
+            Styles.mediumSpace,
+          ],
+        ),
       ),
     );
   }

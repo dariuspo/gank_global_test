@@ -5,9 +5,11 @@ class CallRepository {
   final CollectionReference callCollection =
       FirebaseFirestore.instance.collection("call");
 
+  //to detect incoming call
   Stream<DocumentSnapshot> callStream({String uid}) =>
       callCollection.doc(uid).snapshots();
 
+  //make a call and saved to firebase so other user get noticed
   Future<bool> makeCall({CallModel call}) async {
     try {
       call.hasDialled = true;
@@ -25,6 +27,7 @@ class CallRepository {
     }
   }
 
+  //close the call
   Future<bool> endCall({CallModel call}) async {
     try {
       await callCollection.doc(call.callerId).delete();

@@ -77,12 +77,13 @@ class MyApp extends StatelessWidget {
           home: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state.isLoggedIn) {
+                //listen to call data and login to agora once loggedin
                 BlocProvider.of<ChatBloc>(context).add(LoginAgora(state.user));
                 BlocProvider.of<CallBloc>(context).add(Called());
               }
             },
             builder: (context, state) {
-              //return CallScreen();
+              //detect user auth status
               return state.isChecking
                   ? CircularProgressWidget()
                   : state.isLoggedOut
