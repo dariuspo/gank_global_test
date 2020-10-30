@@ -110,7 +110,7 @@ class _PickupScreenState extends State<PickupScreen> {
                           width: 60,
                           height: 60,
                           child: Icon(
-                            Icons.phone_disabled,
+                            Icons.call_end,
                             color: Colors.white,
                           ),
                         ),

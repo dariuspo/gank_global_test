@@ -279,7 +279,6 @@ class _InputTextChatState extends State<InputTextChat> {
                   disabledBorder: InputBorder.none,
                 ),
                 style: TextStyle(color: Colors.white, fontSize: 42.sp),
-                cursorHeight: 20,
                 minLines: 1,
                 maxLines: 3,
                 showCursor: true,

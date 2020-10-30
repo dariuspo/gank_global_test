@@ -177,7 +177,7 @@ class _CallScreenState extends State<CallScreen> {
                             width: 50,
                             height: 50,
                             child: Icon(
-                              Icons.phone_disabled,
+                              Icons.call_end,
                               color: Colors.white,
                             )),
                         onTap: () async {
