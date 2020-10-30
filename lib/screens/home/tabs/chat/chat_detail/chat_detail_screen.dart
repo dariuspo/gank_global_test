@@ -2,6 +2,7 @@ import 'package:bubble/bubble.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:gank_global_test/blocs/auth/auth_bloc_components.dart';
 import 'package:gank_global_test/blocs/call/call_bloc.dart';
 import 'package:gank_global_test/blocs/call/call_bloc_components.dart';
@@ -34,17 +35,24 @@ class ChatDetailScreen extends StatefulWidget {
 
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   GankUserModel currentUser;
-  final ScrollController scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
+  bool isFirstScrollDone = false;
 
   @override
   void initState() {
     // TODO: implement initState
+    /*SchedulerBinding.instance.addPostFrameCallback((_){
+      print(scrollController.position.maxScrollExtent);
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    });*/
     currentUser = context.repository<UserRepository>().currentUser;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    //print(scrollController.position.maxScrollExtent);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Styles.cardColor,
@@ -63,7 +71,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               showInitialTextAbovePicture: true,
             ),
             Styles.smallSpace,
-            Text(widget.chatWithUser.name),
+            Text(widget.chatWithUser.name, style: Styles.heading4),
             Styles.smallSpace,
             OnlineIndicatorWidget(
               gankUserModel: widget.chatWithUser,
@@ -86,9 +94,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/wa_bg.png"),
-                fit: BoxFit.cover)),
+          color: Styles.backgroundColor,
+          image: DecorationImage(
+              image: AssetImage("assets/images/wa_bg.png"), fit: BoxFit.cover),
+        ),
         child: Column(
           children: [
             Expanded(
@@ -109,21 +118,21 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                         print('snapshot data ${snapshotStream.data}');
                         if (snapshotStream.hasData) {
                           print('snapshot has data');
-                          /*WidgetsBinding.instance.addPostFrameCallback((_) => {
-                                scrollController.animateTo(
-                                  scrollController.position.maxScrollExtent,
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.fastOutSlowIn,
-                                )
-                              });
-*/
+                          if (!isFirstScrollDone) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              scrollController.jumpTo(
+                                scrollController.position.maxScrollExtent,
+                              );
+                              isFirstScrollDone = true;
+                            });
+                          }
                           return Padding(
                             padding: const EdgeInsets.all(10),
-                            child: ListView.builder(
-                              reverse: true,
+                            child: ListView(
+                              reverse: false,
                               controller: scrollController,
-                              itemCount: snapshotStream.data.length,
-                              itemBuilder: (context, index) {
+                              children:
+                                  snapshotStream.data.mapIndexed((e, index) {
                                 bool showDate;
                                 MessageModel messageModel =
                                     snapshotStream.data[index];
@@ -183,7 +192,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                                               ),
                                               Styles.miniSpace,
                                               Text(
-                                                '${messageModel.dateTime.hour}:${messageModel.dateTime.minute}',
+                                                messageModel.dateTime.toHhMm(),
                                                 style: TextStyle(
                                                     color: Colors.grey),
                                               ),
@@ -194,15 +203,15 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                                     ),
                                   ],
                                 );
-                              },
+                              }).toList(),
                             ),
                           );
                         }
-                        return Text('empty stream');
+                        return SizedBox.shrink();
                       },
                     );
                   }
-                  return CircularProgressWidget();
+                  return SizedBox.shrink();
                 },
               ),
             ),
@@ -221,7 +230,8 @@ class InputTextChat extends StatefulWidget {
   final GankUserModel chatWithUser;
   final ScrollController scrollController;
 
-  const InputTextChat({Key key, this.chatWithUser, this.scrollController}) : super(key: key);
+  const InputTextChat({Key key, this.chatWithUser, this.scrollController})
+      : super(key: key);
 
   @override
   _InputTextChatState createState() => _InputTextChatState();
@@ -234,6 +244,7 @@ class _InputTextChatState extends State<InputTextChat> {
   @override
   void initState() {
     // TODO: implement initState
+
     currentUser = context.repository<UserRepository>().currentUser;
     super.initState();
   }
@@ -259,13 +270,16 @@ class _InputTextChatState extends State<InputTextChat> {
                 decoration: InputDecoration(
                   hintText: "Type a message",
                   hintStyle: TextStyle(color: Colors.white54),
-                  contentPadding: EdgeInsets.all(12),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   border: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                 ),
+                style: TextStyle(color: Colors.white, fontSize: 42.sp),
+                cursorHeight: 20,
                 minLines: 1,
                 maxLines: 3,
                 showCursor: true,
@@ -298,10 +312,14 @@ class _InputTextChatState extends State<InputTextChat> {
                       currentUser.uid);
                   textEditingController.text = '';
                   setState(() {});
-                  widget.scrollController.animateTo(
-                    0,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.fastOutSlowIn,
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => {
+                      widget.scrollController.animateTo(
+                        widget.scrollController.position.maxScrollExtent + 30,
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.fastOutSlowIn,
+                      )
+                    },
                   );
                 },
               ),

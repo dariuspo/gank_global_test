@@ -58,7 +58,7 @@ class ChatRepository {
 
   Future<List<MessageModel>> getMessage(String channelId) async {
     QuerySnapshot querySnapshot = await messagesCollection
-        .orderBy("dateTime", descending: true)
+        .orderBy("dateTime", descending: false)
         .where('channelId', isEqualTo: channelId)
         .get();
     final list =
@@ -72,8 +72,7 @@ class ChatRepository {
     List<MessageModel> messages = [];
     messages.addAll(mapStreamChat[toUid].value);
 
-    messages.insert(0,
-        MessageModel(message: text, dateTime: DateTime.now(), fromUid: toUid));
+    messages.add(MessageModel(message: text, dateTime: DateTime.now(), fromUid: toUid));
     print(messages.length);
     mapStreamChat[toUid].add(messages);
   }
@@ -91,20 +90,20 @@ class ChatRepository {
         toUid,
       ),
     );
-    messages.insert(0, messageModel);
+    messages.add(messageModel);
     messagesCollection.doc().set(messageModel.toJson());
     mapStreamChat[toUid].add(messages);
   }
 
   sendMessage(String text, String toUid, String fromUid) async {
+    addMessageToStream(text, toUid, fromUid);
     try {
       AgoraRtmMessage message = AgoraRtmMessage.fromText(text);
       print(message.text);
       await _client.sendMessageToPeer(toUid, message, false);
       print('Send peer message success.');
-      addMessageToStream(message.text, toUid, fromUid);
-      print('Send peer message success.');
     } catch (errorCode) {
+      //Utils.showToast('failed to send to $toUid he is offline');
       print('Send peer message error: ' + errorCode.toString());
     }
   }
@@ -124,6 +123,7 @@ class ChatRepository {
     try {
       Map<String, dynamic> response =
           await _client.queryPeersOnlineStatus([uid]);
+      print(response[uid]);
       return response[uid];
     } catch (e) {}
     return false;

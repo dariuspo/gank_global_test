@@ -83,7 +83,7 @@ class ChatListScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 Positioned(
-                                                  top: 0,
+                                                  bottom: 0,
                                                   right: 0,
                                                   child: OnlineIndicatorWidget(
                                                       gankUserModel:
@@ -95,6 +95,7 @@ class ChatListScreen extends StatelessWidget {
                                             Expanded(
                                               child: Text(
                                                 gankUserModel.name,
+                                                style: Styles.heading5,
                                               ),
                                             ),
                                           ],
@@ -147,4 +148,3 @@ class ChatListScreen extends StatelessWidget {
     });
   }
 }
-

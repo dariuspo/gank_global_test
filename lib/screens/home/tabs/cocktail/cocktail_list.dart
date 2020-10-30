@@ -5,6 +5,7 @@ import 'package:gank_global_test/helpers/styles.dart';
 import 'package:gank_global_test/models/cocktail_model.dart';
 import 'package:gank_global_test/screens/home/tabs/cocktail/bloc/cocktail_bloc_components.dart';
 import 'package:gank_global_test/widgets/animations/circular_progress_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CocktailList extends StatefulWidget {
   final BuildContext context;
@@ -36,61 +37,7 @@ class _CocktailListState extends State<CocktailList> {
                   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                       widget.context),
                 ),
-                SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
-                    childAspectRatio: 9 / 11,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      CocktailModel cocktailModel = state.cocktails[index];
-
-                      return AnimationConfiguration.staggeredList(
-                        position: index,
-                        duration: Duration(milliseconds: 500),
-                        child: SlideAnimation(
-                          verticalOffset: 100,
-                          child: FadeInAnimation(
-                            child: Column(
-                              children: [
-                                Flexible(
-                                  flex: 9,
-                                  child: Card(
-                                    color: Styles.backgroundColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    elevation: 5,
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    child: Image.network(
-                                      cocktailModel.strDrinkThumb,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: Text(
-                                    cocktailModel.strDrink,
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: Text(
-                                    cocktailModel.strCategory,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: state.cocktails.length,
-                  ),
-                )
+                _buildCocktailGrid(state)
               ],
             ),
           );
@@ -100,6 +47,73 @@ class _CocktailListState extends State<CocktailList> {
         }
         return SizedBox.shrink();
       },
+    );
+  }
+
+  SliverGrid _buildCocktailGrid(CocktailLoaded state) {
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 10.0,
+        crossAxisSpacing: 10.0,
+        childAspectRatio: 9 / 11,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          CocktailModel cocktailModel = state.cocktails[index];
+          return _buildCocktailItem(index, cocktailModel);
+        },
+        childCount: state.cocktails.length,
+      ),
+    );
+  }
+
+  AnimationConfiguration _buildCocktailItem(
+      int index, CocktailModel cocktailModel) {
+    return AnimationConfiguration.staggeredList(
+      position: index,
+      duration: Duration(milliseconds: 500),
+      child: SlideAnimation(
+        verticalOffset: 100,
+        child: FadeInAnimation(
+          child: Column(
+            children: [
+              Flexible(
+                flex: 9,
+                child: Card(
+                  color: Styles.backgroundColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 5,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  child: FadeInImage(
+                    fit: BoxFit.cover,
+                    placeholder: AssetImage('assets/images/placeholder.png'),
+                    image: NetworkImage(cocktailModel.strDrinkThumb),
+                  ),
+                ),
+              ),
+              Styles.miniSpace,
+              Flexible(
+                flex: 1,
+                child: Text(
+                  cocktailModel.strDrink,
+                  style: Styles.subtitle2,
+                ),
+              ),
+              Styles.miniSpace,
+              Flexible(
+                flex: 1,
+                child: Text(
+                  cocktailModel.strCategory,
+                  style: Styles.subtitle1,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

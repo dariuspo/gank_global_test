@@ -19,6 +19,8 @@ class OnlineIndicatorWidget extends StatelessWidget {
         future:
             context.repository<ChatRepository>().isOnline(gankUserModel.uid),
         builder: (context, snapShotFuture) {
+          print(snapShotFuture.connectionState);
+          print(snapShotFuture.data);
           if (snapShotFuture.connectionState == ConnectionState.waiting) {
             return CircleAvatar(
               backgroundColor: Colors.white,
@@ -28,7 +30,7 @@ class OnlineIndicatorWidget extends StatelessWidget {
                 backgroundColor: Colors.blue,
               ),
             );
-          } else if (snapShotFuture.hasData) {
+          } else if (snapShotFuture.connectionState == ConnectionState.done) {
             return CircleAvatar(
               backgroundColor: Colors.white,
               radius: 8,

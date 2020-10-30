@@ -49,7 +49,6 @@ class _CallScreenState extends State<CallScreen> {
       callStreamSubscription = callRepository
           .callStream(uid: authRepository.currentUser.uid)
           .listen((DocumentSnapshot ds) {
-        print('document snapshot changed ${ds.data()}');
         switch (ds.data()) {
           case null:
             Navigator.pop(context);
@@ -113,9 +112,22 @@ class _CallScreenState extends State<CallScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(widget.callModel.hasDialled ? widget.callModel.receiverName : widget.callModel.callerName),
             Styles.smallSpace,
-            Text(widget.callModel.hasDialled ? 'Calling' : 'Connected'),
+            Text(
+              widget.callModel.hasDialled
+                  ? widget.callModel.receiverName
+                  : widget.callModel.callerName,
+              style: Styles.heading5.copyWith(
+                fontSize: 52.sp,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            Styles.smallSpace,
+            Text(widget.callModel.hasDialled
+                ? _remoteUid != null
+                    ? 'Connected'
+                    : 'Calling'
+                : 'Connected', style: Styles.heading5,),
             Expanded(
               flex: 7,
               child: Center(
@@ -124,7 +136,9 @@ class _CallScreenState extends State<CallScreen> {
                   radius: 300.w,
                   backgroundColor: Colors.primaries[1],
                   initialsText: Text(
-                    widget.callModel.hasDialled ? widget.callModel.receiverName[0] : widget.callModel.callerName[0],
+                    widget.callModel.hasDialled
+                        ? widget.callModel.receiverName[0]
+                        : widget.callModel.callerName[0],
                     style: TextStyle(fontSize: 200.sp, color: Colors.white),
                   ),
                   elevation: 5.0,

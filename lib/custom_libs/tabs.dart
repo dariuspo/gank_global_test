@@ -10,6 +10,7 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 
 const double _kTabHeight = 46.0;
@@ -384,7 +385,7 @@ class _IndicatorPainter extends CustomPainter {
     }
 
     return Rect.fromLTWH(
-        tabLeft, 20.0, tabRight - tabLeft, tabBarSize.height - 20);
+        tabLeft, 25.0.h, tabRight - tabLeft, tabBarSize.height - 25.h);
   }
 
   @override

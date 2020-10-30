@@ -75,7 +75,13 @@ class RadarChart extends StatefulWidget {
         ticks: ticks,
         features: features,
         data: data,
-        featuresTextStyle: const TextStyle(color: Colors.white, fontSize: 12),
+        featuresTextStyle: TextStyle(
+          fontFamily: Styles.fontNameDefault2,
+          color: Styles.accentColor,
+          fontSize: 18,
+          letterSpacing: 1.3,
+          fontWeight: FontWeight.w400,
+        ),
         outlineColor: Colors.transparent,
         axisColor: Colors.black,
         reverseAxis: reverseAxis,
@@ -284,8 +290,8 @@ class RadarChartPainter extends CustomPainter {
 
       canvas.drawLine(centerOffset, featureOffset, ticksPaint);
 
-      var featureLabelFontHeight = featuresTextStyle.fontSize;
-      var featureLabelFontWidth = featuresTextStyle.fontSize - 5;
+      var featureLabelFontHeight = featuresTextStyle.fontSize -1;
+      var featureLabelFontWidth = featuresTextStyle.fontSize - 11.5;
       var labelYOffset = yAngle < 0 ? -featureLabelFontHeight : 0;
       var labelXOffset =
           xAngle < 0 ? -featureLabelFontWidth * feature.length : 0;
