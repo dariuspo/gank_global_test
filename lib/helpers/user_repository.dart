@@ -9,14 +9,19 @@ class UserRepository {
 
   //this method to handle new user or only get user data
   Future<GankUserModel> getAndOrCreateUser(User user) async {
+    print('get ${user.uid}');
     final doc = await _userCollection.doc(user.uid).get();
     if (doc.data() == null) {
-      currentUser =
-          GankUserModel(uid: user.uid, name: user.uid.substring(0, 6));
+      currentUser = GankUserModel(
+        uid: user.uid,
+        name: user.uid.substring(0, 6),
+        lastLogin: DateTime.now()
+      );
       await saveUser(currentUser);
     } else {
       currentUser = GankUserModel.fromJson(doc.data());
     }
+    print('current user get and create ${currentUser.uid}');
     return currentUser;
   }
 

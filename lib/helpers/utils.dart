@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gank_global_test/helpers/styles.dart';
 
+String currentOpenChannelId = '';
+
 class Utils {
   static showToast(String message) {
     Fluttertoast.showToast(

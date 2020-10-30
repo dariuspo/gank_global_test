@@ -78,6 +78,7 @@ class MyApp extends StatelessWidget {
             listener: (context, state) {
               if (state.isLoggedIn) {
                 //listen to call data and login to agora once loggedin
+                print(state.user.uid);
                 BlocProvider.of<ChatBloc>(context).add(LoginAgora(state.user));
                 BlocProvider.of<CallBloc>(context).add(Called());
               }

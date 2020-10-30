@@ -10,10 +10,13 @@ class AuthRepository {
   AuthRepository() {
     _firebaseAuth.authStateChanges().listen((user) async {
       if (user != null) {
-        await _userCollection.doc(user.uid).set(
-          {'lastLogin': Timestamp.fromDate(DateTime.now())},
-          SetOptions(merge: true),
-        );
+        try{
+          await _userCollection.doc(user.uid).update(
+            {'lastLogin': Timestamp.fromDate(DateTime.now())},
+          );
+        }catch(e){
+          print(e);
+        }
       }
     });
   }

@@ -34,11 +34,11 @@ extension DateTimeExtensiosn on DateTime {
   }
 
   String toHHMM() {
-    return DateFormat('HH:MM').format(this).toUpperCase();
+    return DateFormat('H:m').format(this).toUpperCase();
   }
 
   String tohhmmaa() {
-    return DateFormat('HH:MM aa').format(this).toUpperCase();
+    return DateFormat('hh:m aa').format(this).toUpperCase();
   }
 }
 

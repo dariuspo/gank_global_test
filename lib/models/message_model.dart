@@ -8,17 +8,23 @@ part 'message_model.g.dart';
   explicitToJson: true,
 )
 class MessageModel {
+  final String id;
   final String message;
   final String fromUid;
+  final String toUid;
   @JsonKey(fromJson: timeStampToDateFromJson, toJson: dateTimeToTimeStampToJson)
   final DateTime dateTime;
   final String channelId;
+  final bool isRead;
 
   MessageModel({
+    this.id,
     this.message,
     this.fromUid,
+    this.toUid,
     this.dateTime,
     this.channelId,
+    this.isRead,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) =>

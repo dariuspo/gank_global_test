@@ -1,5 +1,6 @@
 import 'package:gank_global_test/models/message_model.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 part 'gank_user_model.g.dart';
 

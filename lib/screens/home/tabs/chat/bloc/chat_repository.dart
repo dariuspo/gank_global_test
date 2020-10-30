@@ -31,9 +31,16 @@ class ChatRepository {
     _client = await AgoraRtmClient.createInstance(APP_ID);
     //detect when there is incoming messages
     _client.onMessageReceived = (AgoraRtmMessage message, String fromUid) {
+      String channelId = Utils.getChatRoomId(currentUid, fromUid);
+      if (currentOpenChannelId == channelId) {
+        markMessageAsRead(channelId);
+      } else {
+        Get.snackbar(
+            'new message from ${fromUid.substring(0, 6)}', message.text,
+            colorText: Colors.white);
+      }
       addReceivedMessageToStream(message.text, fromUid);
-      Get.snackbar('new message from ${fromUid.substring(0, 6)}', message.text,
-          colorText: Colors.white);
+
       print("Peer msg: " + fromUid + ", msg: " + message.text);
     };
     //detect connection change
@@ -65,7 +72,36 @@ class ChatRepository {
         .get();
     final list =
         querySnapshot.docs.map((e) => MessageModel.fromJson(e.data())).toList();
+    print(list.length);
+    marksMessagesAsRead(list);
     return list;
+  }
+
+  markMessageAsRead(String channelId) async {
+    QuerySnapshot querySnapshot = await messagesCollection
+        .orderBy("dateTime", descending: false)
+        .where('channelId', isEqualTo: channelId)
+        .limit(1)
+        .get();
+
+    await messagesCollection.doc(querySnapshot.docs.first.id).update(
+      {'isRead': true},
+    );
+  }
+
+  marksMessagesAsRead(List<MessageModel> messages) {
+    final unReadMessages =
+        messages.where((message) => !message.isRead).toList();
+    unReadMessages.forEach((message) async {
+      try {
+        await messagesCollection.doc(message.id).update(
+          {'isRead': true},
+        );
+      } catch (e) {
+        print(e);
+        print('error update chat to read');
+      }
+    });
   }
 
   //this method handle incoming message
@@ -84,6 +120,8 @@ class ChatRepository {
     await initMapStream(toUid);
     List<MessageModel> messages = [];
     messages.addAll(mapStreamChat[toUid].value);
+    String id = messagesCollection.doc().id;
+
     MessageModel messageModel = MessageModel(
       message: text,
       dateTime: DateTime.now(),
@@ -92,14 +130,17 @@ class ChatRepository {
         fromUid,
         toUid,
       ),
+      toUid: toUid,
+      id: id,
+      isRead: false,
     );
     messages.add(messageModel);
-    messagesCollection.doc().set(messageModel.toJson());
+    messagesCollection.doc(id).set(messageModel.toJson());
     mapStreamChat[toUid].add(messages);
   }
 
   sendMessage(String text, String toUid, String fromUid) async {
-    addMessageToStream(text, toUid, fromUid);
+    await addMessageToStream(text, toUid, fromUid);
     try {
       AgoraRtmMessage message = AgoraRtmMessage.fromText(text);
       await _client.sendMessageToPeer(toUid, message, false);
@@ -141,8 +182,9 @@ class ChatRepository {
         .limit(1)
         .snapshots()) {
       print('new snapshot ${data.docs.length}');
-      if(data.docs.isNotEmpty){
-        final list = data.docs.map((doc) => MessageModel.fromJson(doc.data())).toList();
+      if (data.docs.isNotEmpty) {
+        final list =
+            data.docs.map((doc) => MessageModel.fromJson(doc.data())).toList();
         yield list[0];
       }
     }
