@@ -31,9 +31,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       });
       yield LoggedIn(gankUserModels: _usersStream.stream);
     }
-    if (event is SendMessage) {
-
-    }
+    if (event is SendMessage) {}
   }
 
   void dispose() {

@@ -2,13 +2,12 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'
     hide TabBar, TabBarIndicatorSize, TabBarView;
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gank_global_test/blocs/auth/auth_bloc_components.dart';
 import 'package:gank_global_test/custom_libs/tabs.dart';
 import 'package:gank_global_test/datas/tabs_data.dart';
 import 'package:gank_global_test/helpers/after_init.dart';
 import 'package:gank_global_test/helpers/styles.dart';
+import 'package:gank_global_test/models/tab_model.dart';
 import 'package:gank_global_test/screens/home/tabs/account/account_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/chat_list/chat_list_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/cocktail/cocktail_screen.dart';
@@ -79,93 +78,7 @@ class _HomeScreenState extends State<HomeScreen>
                 flexibleSpace: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     _top = constraints.biggest.height;
-                    return FlexibleSpaceBar(
-                      titlePadding: EdgeInsets.zero,
-                      centerTitle: false,
-                      title: Stack(
-                        children: [
-                          StreamBuilder<int>(
-                              stream: _streamController.stream,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Positioned.fill(
-                                    child: Image.asset(
-                                      tabsData[snapshot.data].bgImage,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  );
-                                } else {
-                                  return SizedBox.shrink();
-                                }
-                              }),
-                          ColorCoverGradientWidget(),
-                          SafeArea(
-                            child: Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: 20),
-                                child: TabBar(
-                                  labelPadding:
-                                      EdgeInsets.symmetric(horizontal: 10),
-                                  isScrollable: true,
-                                  indicatorSize: TabBarIndicatorSize.label,
-                                  controller: _tabController,
-                                  indicator: BoxDecoration(
-                                    border: Border.all(
-                                        color: Styles.accentColor, width: 2),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  tabs: tabsData
-                                      .map(
-                                        (e) => Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            AnimatedOpacity(
-                                              duration:
-                                                  Duration(milliseconds: 100),
-                                              opacity: _top <= 150 ? 0 : 1,
-                                              child: Text(e.title, style: Styles.heading6,),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(2.0),
-                                              child: Container(
-                                                padding: EdgeInsets.all(5),
-                                                width: 260.w,
-                                                height: 150.h,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  image: DecorationImage(
-                                                    image:
-                                                        AssetImage(e.bgImage),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                child: e.frontImage == null
-                                                    ? SizedBox.shrink()
-                                                    : CircleAvatar(
-                                                        backgroundColor: Styles
-                                                            .backgroundColor,
-                                                        child: Image.asset(
-                                                          e.frontImage,
-                                                          fit: BoxFit.contain,
-                                                        ),
-                                                      ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      /*background: ,*/
-                    );
+                    return _buildFlexibleSpace();
                   },
                 ),
               ),
@@ -192,6 +105,96 @@ class _HomeScreenState extends State<HomeScreen>
           },
         ),
       ),
+    );
+  }
+
+  FlexibleSpaceBar _buildFlexibleSpace() {
+    return FlexibleSpaceBar(
+      titlePadding: EdgeInsets.zero,
+      centerTitle: false,
+      title: Stack(
+        children: [
+          StreamBuilder<int>(
+              stream: _streamController.stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Positioned.fill(
+                    child: Image.asset(
+                      tabsData[snapshot.data].bgImage,
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              }),
+          ColorCoverGradientWidget(),
+          _buildTabs(),
+        ],
+      ),
+      /*background: ,*/
+    );
+  }
+
+  SafeArea _buildTabs() {
+    return SafeArea(
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 20),
+          child: TabBar(
+            labelPadding: EdgeInsets.symmetric(horizontal: 10),
+            isScrollable: true,
+            indicatorSize: TabBarIndicatorSize.label,
+            controller: _tabController,
+            indicator: BoxDecoration(
+              border: Border.all(color: Styles.accentColor, width: 2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            tabs: tabsData.map((e) => _buildTabBarItem(e)).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Column _buildTabBarItem(TabModel e) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AnimatedOpacity(
+          duration: Duration(milliseconds: 100),
+          opacity: _top <= 150 ? 0 : 1,
+          child: Text(
+            e.title,
+            style: Styles.heading6,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Container(
+            padding: EdgeInsets.all(5),
+            width: 260.w,
+            height: 150.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: AssetImage(e.bgImage),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: e.frontImage == null
+                ? SizedBox.shrink()
+                : CircleAvatar(
+                    backgroundColor: Styles.backgroundColor,
+                    child: Image.asset(
+                      e.frontImage,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+          ),
+        ),
+      ],
     );
   }
 }

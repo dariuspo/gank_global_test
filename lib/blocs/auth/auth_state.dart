@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gank_global_test/models/gank_user_model.dart';
 import 'package:meta/meta.dart';
 

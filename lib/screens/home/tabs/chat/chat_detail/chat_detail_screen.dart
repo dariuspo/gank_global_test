@@ -2,24 +2,19 @@ import 'package:bubble/bubble.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:gank_global_test/blocs/auth/auth_bloc_components.dart';
 import 'package:gank_global_test/blocs/call/call_bloc.dart';
 import 'package:gank_global_test/blocs/call/call_bloc_components.dart';
 import 'package:gank_global_test/helpers/styles.dart';
 import 'package:gank_global_test/helpers/extensions.dart';
-
 import 'package:gank_global_test/helpers/user_repository.dart';
 import 'package:gank_global_test/models/gank_user_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gank_global_test/models/message_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_bloc.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_repository.dart';
-import 'package:gank_global_test/screens/home/tabs/chat/call/call_screen.dart';
 import 'package:gank_global_test/widgets/animations/circular_progress_widget.dart';
 import 'package:gank_global_test/widgets/online_indicator_widget.dart';
-import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ChatDetailScreen extends StatefulWidget {
@@ -40,44 +35,16 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    /*SchedulerBinding.instance.addPostFrameCallback((_){
-      print(scrollController.position.maxScrollExtent);
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    });*/
     currentUser = context.repository<UserRepository>().currentUser;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    //print(scrollController.position.maxScrollExtent);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Styles.cardColor,
-        title: Row(
-          children: [
-            CircularProfileAvatar(
-              '',
-              radius: 40.w,
-              backgroundColor: Colors.primaries[widget.index],
-              initialsText: Text(
-                widget.chatWithUser.name[0],
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
-              elevation: 5.0,
-              cacheImage: true,
-              showInitialTextAbovePicture: true,
-            ),
-            Styles.smallSpace,
-            Text(widget.chatWithUser.name, style: Styles.heading4),
-            Styles.smallSpace,
-            OnlineIndicatorWidget(
-              gankUserModel: widget.chatWithUser,
-            ),
-          ],
-        ),
+        title: _buildAppBarUser(),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 17.0),
@@ -100,121 +67,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         ),
         child: Column(
           children: [
-            Expanded(
-              child: FutureBuilder<BehaviorSubject<List<MessageModel>>>(
-                future: context.repository<ChatRepository>().getMapStreamChat(
-                    context.repository<AuthRepository>().currentUser.uid,
-                    widget.chatWithUser.uid),
-                builder: (context, snapshot) {
-                  print(snapshot.connectionState);
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressWidget();
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    print('bild stream builder ${snapshot.data.value.length}');
-                    return StreamBuilder<List<MessageModel>>(
-                      stream: snapshot.data,
-                      builder: (context, snapshotStream) {
-                        DateTime currentDate;
-                        print('snapshot data ${snapshotStream.data}');
-                        if (snapshotStream.hasData) {
-                          print('snapshot has data');
-                          if (!isFirstScrollDone) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              scrollController.jumpTo(
-                                scrollController.position.maxScrollExtent,
-                              );
-                              isFirstScrollDone = true;
-                            });
-                          }
-                          return Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: ListView(
-                              reverse: false,
-                              controller: scrollController,
-                              children:
-                                  snapshotStream.data.mapIndexed((e, index) {
-                                bool showDate;
-                                MessageModel messageModel =
-                                    snapshotStream.data[index];
-                                if (currentDate == null) {
-                                  currentDate = messageModel.dateTime;
-                                  showDate = true;
-                                } else if (!currentDate
-                                    .isSameDay(messageModel.dateTime)) {
-                                  showDate = true;
-                                  currentDate = messageModel.dateTime;
-                                } else {
-                                  showDate = false;
-                                }
-                                bool isFromMe =
-                                    messageModel.fromUid == currentUser.uid;
-                                return Column(
-                                  children: [
-                                    if (showDate)
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color: Styles.cardColor,
-                                            borderRadius:
-                                                BorderRadius.circular(5.0)),
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 5,
-                                          horizontal: 10,
-                                        ),
-                                        child: Text(
-                                          messageModel.dateTime
-                                              .toChatDateLabel(),
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                      ),
-                                    Align(
-                                      alignment: isFromMe
-                                          ? Alignment.centerRight
-                                          : Alignment.centerLeft,
-                                      child: Bubble(
-                                        margin: BubbleEdges.only(top: 10),
-                                        color: isFromMe
-                                            ? Styles.whatsAppColor
-                                            : Styles.cardColor,
-                                        nip: isFromMe
-                                            ? BubbleNip.rightTop
-                                            : BubbleNip.leftTop,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 4.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                messageModel.message,
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                              Styles.miniSpace,
-                                              Text(
-                                                messageModel.dateTime.toHhMm(),
-                                                style: TextStyle(
-                                                    color: Colors.grey),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }).toList(),
-                            ),
-                          );
-                        }
-                        return SizedBox.shrink();
-                      },
-                    );
-                  }
-                  return SizedBox.shrink();
-                },
-              ),
-            ),
+            _buildMessageBody(context),
             InputTextChat(
               chatWithUser: widget.chatWithUser,
               scrollController: scrollController,
@@ -222,6 +75,136 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Expanded _buildMessageBody(BuildContext context) {
+    return Expanded(
+      child: FutureBuilder<BehaviorSubject<List<MessageModel>>>(
+        future: context.repository<ChatRepository>().getMapStreamChat(
+            context.repository<AuthRepository>().currentUser.uid,
+            widget.chatWithUser.uid),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressWidget();
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return StreamBuilder<List<MessageModel>>(
+              stream: snapshot.data,
+              builder: (context, snapshotStream) {
+                DateTime currentDate;
+                if (snapshotStream.hasData) {
+                  if (!isFirstScrollDone) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      scrollController.jumpTo(
+                        scrollController.position.maxScrollExtent,
+                      );
+                      isFirstScrollDone = true;
+                    });
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: ListView(
+                      reverse: false,
+                      controller: scrollController,
+                      children: snapshotStream.data.mapIndexed((e, index) {
+                        bool showDate;
+                        MessageModel messageModel = snapshotStream.data[index];
+                        if (currentDate == null) {
+                          currentDate = messageModel.dateTime;
+                          showDate = true;
+                        } else if (!currentDate
+                            .isSameDay(messageModel.dateTime)) {
+                          showDate = true;
+                          currentDate = messageModel.dateTime;
+                        } else {
+                          showDate = false;
+                        }
+                        bool isFromMe = messageModel.fromUid == currentUser.uid;
+                        return Column(
+                          children: [
+                            if (showDate) _buildTimeLabel(messageModel),
+                            _buildChatBubble(isFromMe, messageModel),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  );
+                }
+                return SizedBox.shrink();
+              },
+            );
+          }
+          return SizedBox.shrink();
+        },
+      ),
+    );
+  }
+
+  Container _buildTimeLabel(MessageModel messageModel) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Styles.cardColor, borderRadius: BorderRadius.circular(5.0)),
+      padding: EdgeInsets.symmetric(
+        vertical: 5,
+        horizontal: 10,
+      ),
+      child: Text(
+        messageModel.dateTime.toChatDateLabel(),
+        style: TextStyle(color: Colors.grey),
+      ),
+    );
+  }
+
+  Align _buildChatBubble(bool isFromMe, MessageModel messageModel) {
+    return Align(
+      alignment: isFromMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Bubble(
+        margin: BubbleEdges.only(top: 10),
+        color: isFromMe ? Styles.whatsAppColor : Styles.cardColor,
+        nip: isFromMe ? BubbleNip.rightTop : BubbleNip.leftTop,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                messageModel.message,
+                style: TextStyle(color: Colors.white),
+              ),
+              Styles.miniSpace,
+              Text(
+                messageModel.dateTime.toHhMm(),
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row _buildAppBarUser() {
+    return Row(
+      children: [
+        CircularProfileAvatar(
+          '',
+          radius: 40.w,
+          backgroundColor: Colors.primaries[widget.index],
+          initialsText: Text(
+            widget.chatWithUser.name[0],
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
+          elevation: 5.0,
+          cacheImage: true,
+          showInitialTextAbovePicture: true,
+        ),
+        Styles.smallSpace,
+        Text(widget.chatWithUser.name, style: Styles.heading4),
+        Styles.smallSpace,
+        OnlineIndicatorWidget(
+          gankUserModel: widget.chatWithUser,
+        ),
+      ],
     );
   }
 }

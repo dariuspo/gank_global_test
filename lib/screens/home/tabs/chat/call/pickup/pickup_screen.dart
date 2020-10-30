@@ -63,11 +63,15 @@ class _PickupScreenState extends State<PickupScreen> {
                     showInitialTextAbovePicture: true,
                   ),
                   Styles.mediumSpace,
-                  Text(widget.callModel.callerName, style: Styles.heading3,),
+                  Text(
+                    widget.callModel.callerName,
+                    style: Styles.heading3,
+                  ),
                   Styles.mediumSpace,
                   Text(
                     'Whatsapp voice call',
-                    style: Styles.heading5.copyWith(fontStyle: FontStyle.italic),
+                    style:
+                        Styles.heading5.copyWith(fontStyle: FontStyle.italic),
                   ),
                   Styles.mediumSpace,
                 ],
@@ -95,7 +99,7 @@ class _PickupScreenState extends State<PickupScreen> {
                           ),
                         ),
                         onTap: () async {
-                          Get.to(CallScreen(
+                          Get.off(CallScreen(
                             callModel: widget.callModel,
                           ));
                         },

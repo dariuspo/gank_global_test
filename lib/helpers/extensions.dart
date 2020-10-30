@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+
 extension DateTimeExtensiosn on DateTime {
   bool isToday() {
     final now = DateTime.now();
@@ -20,13 +21,13 @@ extension DateTimeExtensiosn on DateTime {
         dateTime.year == this.year;
   }
 
-  String toChatDateLabel(){
-    if(this.isToday()) return 'TODAY';
-    if(this.isYesterday()) return 'YESTERDAY';
+  String toChatDateLabel() {
+    if (this.isToday()) return 'TODAY';
+    if (this.isYesterday()) return 'YESTERDAY';
     return DateFormat('MMMM dd, yyyy').format(this).toUpperCase();
   }
 
-  String toHhMm(){
+  String toHhMm() {
     return DateFormat('HH:MM').format(this).toUpperCase();
   }
 }

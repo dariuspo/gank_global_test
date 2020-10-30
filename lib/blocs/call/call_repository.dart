@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gank_global_test/models/call_model.dart';
-import 'package:gank_global_test/models/message_model.dart';
 
 class CallRepository {
   final CollectionReference callCollection =
       FirebaseFirestore.instance.collection("call");
-
 
   Stream<DocumentSnapshot> callStream({String uid}) =>
       callCollection.doc(uid).snapshots();
@@ -26,7 +24,6 @@ class CallRepository {
       return false;
     }
   }
-
 
   Future<bool> endCall({CallModel call}) async {
     try {

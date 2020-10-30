@@ -60,8 +60,7 @@ class Styles {
   );
 
   static final heading5 = TextStyle(
-    fontFamily:
-    Styles.fontNameDefaultWA,
+    fontFamily: Styles.fontNameDefaultWA,
     color: Colors.white,
     fontSize: 32.sp,
     //24

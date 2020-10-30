@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 part 'call_model.g.dart';
+
 @JsonSerializable(
   anyMap: true,
   explicitToJson: true,

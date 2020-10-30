@@ -19,8 +19,6 @@ class OnlineIndicatorWidget extends StatelessWidget {
         future:
             context.repository<ChatRepository>().isOnline(gankUserModel.uid),
         builder: (context, snapShotFuture) {
-          print(snapShotFuture.connectionState);
-          print(snapShotFuture.data);
           if (snapShotFuture.connectionState == ConnectionState.waiting) {
             return CircleAvatar(
               backgroundColor: Colors.white,

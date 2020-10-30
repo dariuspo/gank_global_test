@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'message_model.g.dart';
+
 @JsonSerializable(
   anyMap: true,
   explicitToJson: true,

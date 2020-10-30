@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepository {
@@ -13,8 +12,8 @@ class AuthRepository {
   }
 
   Future<User> login() async {
-    UserCredential userCredential =  await _firebaseAuth.signInAnonymously();
-    currentUser= userCredential.user;
+    UserCredential userCredential = await _firebaseAuth.signInAnonymously();
+    currentUser = userCredential.user;
     return currentUser;
   }
 

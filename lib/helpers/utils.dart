@@ -13,6 +13,7 @@ class Utils {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
   static String getChatRoomId(String user1, String user2) {
     if (user1.compareTo(user2) == 1) {
       return "$user1-$user2";

@@ -1,10 +1,9 @@
 // originally from https://github.com/vgventures/after_init
 // just renamed to afterInitState, instead of didInitState
-
 import 'package:flutter/widgets.dart';
 
 /// This mixin adds a [afterInitState] lifecycle method to a [StatefulWidget] [State] object.
-/// From there you can safely access [BuildContext.inheritFromWidgetOfExactType].
+/// From there you can safely access [BuildContext].
 mixin AfterInitMixin<T extends StatefulWidget> on State<T> {
   bool _didInitState = false;
 

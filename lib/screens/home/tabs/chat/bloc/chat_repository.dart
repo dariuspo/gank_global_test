@@ -23,7 +23,6 @@ class ChatRepository {
 
   init() async {
     _client = await AgoraRtmClient.createInstance(APP_ID);
-    print(_client);
     _client.onMessageReceived = (AgoraRtmMessage message, String fromUid) {
       addReceivedMessageToStream(message.text, fromUid);
       print("Peer msg: " + fromUid + ", msg: " + message.text);
@@ -46,14 +45,12 @@ class ChatRepository {
   Future<bool> initMapStream(String peerId) async {
     if (mapStreamChat[peerId] == null) {
       mapStreamChat[peerId] = BehaviorSubject();
-      print(Utils.getChatRoomId(currentUid, peerId));
       List<MessageModel> messages =
           await getMessage(Utils.getChatRoomId(currentUid, peerId));
-      print('after get messages');
-      print(messages.length);
       mapStreamChat[peerId].add(messages ?? []);
       return true;
-    } return false;
+    }
+    return false;
   }
 
   Future<List<MessageModel>> getMessage(String channelId) async {
@@ -63,16 +60,16 @@ class ChatRepository {
         .get();
     final list =
         querySnapshot.docs.map((e) => MessageModel.fromJson(e.data())).toList();
-    print(list.length);
     return list;
   }
 
-  addReceivedMessageToStream(String text, String toUid) async{
+  addReceivedMessageToStream(String text, String toUid) async {
     bool isFirstTime = await initMapStream(toUid);
-    if(isFirstTime) return;
+    if (isFirstTime) return;
     List<MessageModel> messages = [];
     messages.addAll(mapStreamChat[toUid].value);
-    messages.add(MessageModel(message: text, dateTime: DateTime.now(), fromUid: toUid));
+    messages.add(
+        MessageModel(message: text, dateTime: DateTime.now(), fromUid: toUid));
     mapStreamChat[toUid].add(messages);
   }
 
@@ -98,7 +95,6 @@ class ChatRepository {
     addMessageToStream(text, toUid, fromUid);
     try {
       AgoraRtmMessage message = AgoraRtmMessage.fromText(text);
-      print(message.text);
       await _client.sendMessageToPeer(toUid, message, false);
       print('Send peer message success.');
     } catch (errorCode) {

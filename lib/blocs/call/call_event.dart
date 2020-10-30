@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:gank_global_test/models/gank_user_model.dart';
-import 'package:gank_global_test/models/message_model.dart';
 
 abstract class CallEvent extends Equatable {
   const CallEvent();
@@ -14,8 +13,6 @@ class StartCall extends CallEvent {
   final GankUserModel userTo;
 
   StartCall({this.userFrom, this.userTo});
-
 }
 
 class Called extends CallEvent {}
-

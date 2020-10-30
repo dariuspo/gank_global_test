@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:gank_global_test/models/gank_user_model.dart';
 
 abstract class CallState extends Equatable {
   const CallState();

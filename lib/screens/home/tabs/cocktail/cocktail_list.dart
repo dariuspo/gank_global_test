@@ -5,7 +5,6 @@ import 'package:gank_global_test/helpers/styles.dart';
 import 'package:gank_global_test/models/cocktail_model.dart';
 import 'package:gank_global_test/screens/home/tabs/cocktail/bloc/cocktail_bloc_components.dart';
 import 'package:gank_global_test/widgets/animations/circular_progress_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CocktailList extends StatefulWidget {
   final BuildContext context;
@@ -32,8 +31,7 @@ class _CocktailListState extends State<CocktailList> {
             child: CustomScrollView(
               slivers: <Widget>[
                 SliverOverlapInjector(
-                  // This is the flip side of the SliverOverlapAbsorber
-                  // above.
+                  // This is the flip side of the SliverOverlapAbsorber above.
                   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                       widget.context),
                 ),
@@ -80,19 +78,7 @@ class _CocktailListState extends State<CocktailList> {
             children: [
               Flexible(
                 flex: 9,
-                child: Card(
-                  color: Styles.backgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 5,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: FadeInImage(
-                    fit: BoxFit.cover,
-                    placeholder: AssetImage('assets/images/placeholder.png'),
-                    image: NetworkImage(cocktailModel.strDrinkThumb),
-                  ),
-                ),
+                child: _buildCocktailCard(cocktailModel),
               ),
               Styles.miniSpace,
               Flexible(
@@ -113,6 +99,22 @@ class _CocktailListState extends State<CocktailList> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Card _buildCocktailCard(CocktailModel cocktailModel) {
+    return Card(
+      color: Styles.backgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 5,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: FadeInImage(
+        fit: BoxFit.cover,
+        placeholder: AssetImage('assets/images/placeholder.png'),
+        image: NetworkImage(cocktailModel.strDrinkThumb),
       ),
     );
   }

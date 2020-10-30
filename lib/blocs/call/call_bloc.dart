@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gank_global_test/blocs/auth/auth_bloc_components.dart';
 import 'package:gank_global_test/blocs/call/call_bloc_components.dart';
-import 'package:gank_global_test/helpers/user_repository.dart';
 import 'package:gank_global_test/models/call_model.dart';
 import 'package:gank_global_test/models/gank_user_model.dart';
-import 'package:gank_global_test/screens/home/tabs/chat/bloc/chat_repository.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/call/call_screen.dart';
 import 'package:gank_global_test/screens/home/tabs/chat/call/pickup/pickup_screen.dart';
 import 'package:get/get.dart';
@@ -32,19 +30,16 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     CallEvent event,
   ) async* {
     if (event is Called) {
-      print('bloc initial state');
 
       _callRepository
           .callStream(uid: _authRepository.currentUser.uid)
           .listen((event) {
-        print('from bloc listener ${event.data()}');
         if (event.data() != null) {
-          print('from bloc listener');
           CallModel call = CallModel.fromJson(event.data());
           if (!call.hasDialled) {
             Get.to(PickupScreen(callModel: call));
           }
-        }else {
+        } else {
           Get.back();
         }
       });

@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:gank_global_test/apis/cocktail_api.dart';
 import 'package:gank_global_test/models/cocktail_model.dart';
 import 'package:gank_global_test/models/cocktails_model.dart';
