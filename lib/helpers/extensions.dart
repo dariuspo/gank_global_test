@@ -27,8 +27,18 @@ extension DateTimeExtensiosn on DateTime {
     return DateFormat('MMMM dd, yyyy').format(this).toUpperCase();
   }
 
-  String toHhMm() {
+  String toChatListDateLabel() {
+    if (this.isToday()) return this.tohhmmaa();
+    if (this.isYesterday()) return 'YESTERDAY';
+    return DateFormat('MMMM dd, yyyy').format(this).toUpperCase();
+  }
+
+  String toHHMM() {
     return DateFormat('HH:MM').format(this).toUpperCase();
+  }
+
+  String tohhmmaa() {
+    return DateFormat('HH:MM aa').format(this).toUpperCase();
   }
 }
 

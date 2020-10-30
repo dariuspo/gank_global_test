@@ -173,7 +173,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               ),
               Styles.miniSpace,
               Text(
-                messageModel.dateTime.toHhMm(),
+                messageModel.dateTime.toHHMM(),
                 style: TextStyle(color: Colors.grey),
               ),
             ],

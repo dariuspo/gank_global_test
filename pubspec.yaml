@@ -38,6 +38,7 @@ dependencies:
   flutter_screenutil: ^3.2.0
   flutter_staggered_animations: ^0.1.2
   flutter_swiper: ^1.1.6
+  flutter_sfsymbols: ^1.0.0
   fluttertoast: ^7.1.1
   get: ^3.8.0
   http: ^0.12.2
@@ -139,6 +140,9 @@ flutter:
           weight: 100
         - asset: assets/fonts/Helveticaneue/HelveticaNeue.ttf
           weight: 500
+    - family: sficonsets
+      fonts:
+        - asset: packages/flutter_sfsymbols/fonts/sficonsets.ttf
 
 
   # For details regarding fonts from package dependencies,

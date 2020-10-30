@@ -101,12 +101,12 @@ class Styles {
   );
 
   static final bodyText2 = TextStyle(
-    fontFamily: fontNameDefault,
-    color: Colors.black,
-    fontSize: 14.sp,
-    //14
+    fontFamily: fontNameDefaultWA,
+    color: Colors.grey,
+    fontSize: 32.sp,
+
     fontWeight: FontWeight.w400,
-    letterSpacing: 0.25, //0.25
+    letterSpacing: 0.5, //0.25
   );
 
   static final button = TextStyle(

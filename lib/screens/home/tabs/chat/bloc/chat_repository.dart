@@ -15,6 +15,7 @@ class ChatRepository {
 
   AgoraRtmClient _client;
   Map<String, BehaviorSubject<List<MessageModel>>> mapStreamChat = {};
+
   //Map<String, BehaviorSubject<List<MessageModel>>> mapStreamChat = {};
 
   String currentUid;
@@ -31,11 +32,8 @@ class ChatRepository {
     //detect when there is incoming messages
     _client.onMessageReceived = (AgoraRtmMessage message, String fromUid) {
       addReceivedMessageToStream(message.text, fromUid);
-      Get.snackbar(
-        'new message from ${fromUid.substring(0, 6)}',
-        message.text,
-        colorText: Colors.white
-      );
+      Get.snackbar('new message from ${fromUid.substring(0, 6)}', message.text,
+          colorText: Colors.white);
       print("Peer msg: " + fromUid + ", msg: " + message.text);
     };
     //detect connection change
@@ -132,6 +130,22 @@ class ChatRepository {
       return response[uid];
     } catch (e) {}
     return false;
+  }
+
+  //get list users to chat with
+  Stream<MessageModel> getLatestMessage(String channelId) async* {
+    print('listen to $channelId');
+    await for (QuerySnapshot data in messagesCollection
+        .orderBy("dateTime", descending: true)
+        .where('channelId', isEqualTo: channelId)
+        .limit(1)
+        .snapshots()) {
+      print('new snapshot ${data.docs.length}');
+      if(data.docs.isNotEmpty){
+        final list = data.docs.map((doc) => MessageModel.fromJson(doc.data())).toList();
+        yield list[0];
+      }
+    }
   }
 
   dispose() {
