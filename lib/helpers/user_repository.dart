@@ -27,7 +27,8 @@ class UserRepository {
 
   //get list users to chat with
   Stream<List<GankUserModel>> getUsers(GankUserModel currentUser) async* {
-    await for (QuerySnapshot data in _userCollection.snapshots()) {
+    await for (QuerySnapshot data
+        in _userCollection.orderBy('lastLogin', descending: true).snapshots()) {
       final list =
           data.docs.map((doc) => GankUserModel.fromJson(doc.data())).toList();
       list.removeWhere((element) => element.uid == currentUser.uid);

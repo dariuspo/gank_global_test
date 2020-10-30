@@ -50,6 +50,7 @@ class _CallScreenState extends State<CallScreen> {
           .listen((DocumentSnapshot ds) {
         switch (ds.data()) {
           case null:
+            callStreamSubscription.cancel();
             engine?.leaveChannel();
             engine?.destroy();
             Navigator.pop(context);
@@ -241,7 +242,7 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   void dispose() {
-    callStreamSubscription.cancel();
+    callStreamSubscription?.cancel();
     engine?.leaveChannel();
     engine?.destroy();
     super.dispose();
